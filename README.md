@@ -23,5 +23,42 @@ Este repositorio reúne la documentación, configuraciones y evidencias necesari
 
 - Documentar cada paso del proceso.
 
+## 🛠️ Tecnologías utilizadas
+
+- Ubuntu Server
+
+- Samba Active Directory (AD DC)
+
+- Samba DNS interno
+
+- Herramientas de administración de Linux
+
+- Equipos clientes Linux o Windows (para pruebas)
+
+## 📂 Estructura del repositorio
+
+/documentacion
+/configuracion
+/evidencias
+/scripts (opcional)
+/README.md
+
+
+## 🚀 Progreso del proyecto
+
+- [ ] Repositorio creado
+
+- [ ] Instalación base de Ubuntu Server
+
+- [ ] Configuración de red
+
+- [ ] Instalación y configuración de Samba AD DC
+
+- [ ] Unión de clientes
+
+- [ ] Pruebas de autenticación
+
+- [ ] Documentación final
+
 > [!NOTE]
 > Useful information that users should know, este contenido esta dedicado al ambito educativo.
