@@ -426,7 +426,7 @@ sudo samba-tool user getgroups bob
 sudo samba-tool user show bob
 ```
 
-![Gestión de usuarios y OUs](/evidencias/03-usuarios-grupos/mover_usu_UO.png)
+![Gestión de usuarios y OUs](/evidencias/03-usuarios-grupos/mover_usu_OU.png)
 
 ---
 
