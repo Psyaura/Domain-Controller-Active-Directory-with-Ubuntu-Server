@@ -117,7 +117,7 @@ La VM debe tener **dos adaptadores de red**:
   - Nombre de la red interna: `intnet`
   - IP estática: `172.30.20.32/25`
 
-![Configuración de red VirtualBox](/evidencias/01-instalacion/virtualbox-network.png)
+![Configuración de red VirtualBox](/evidencias/01-instalacion/Instalacion%20Linux%20Vbox.png)
 
 > **📸 Ver más evidencias**: [/evidencias/01-instalacion/](/evidencias/01-instalacion/)
 
@@ -141,7 +141,6 @@ Tras la instalación, el sistema debe:
 - ✅ Permitir login con el usuario creado
 - ✅ Tener conectividad de red básica
 
-![Instalación Ubuntu Server completada](/evidencias/01-instalacion/ubuntu-install-complete.png)
 
 ---
 
@@ -152,7 +151,7 @@ Tras la instalación, el sistema debe:
 Editar el archivo de configuración de red:
 
 ```bash
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/00-installer-config.yaml(o el archivo que tu sistema cree)
 ```
 
 **Configuración recomendada**:
@@ -171,6 +170,8 @@ network:
          - 127.0.0.1      # DNS local (Samba)
          - 10.239.3.7     # DNS secundario (opcional)
 ```
+
+![Configuración de red VirtualBox](/evidencias/02-configuracion/netplan_serv.png)
 
 **Aplicar cambios**:
 
@@ -204,8 +205,9 @@ Contenido:
 ```
 127.0.0.1       localhost
 127.0.1.1       ls03
-172.30.20.32    ls03.lab03.local ls03
+192.168.1.2     ls03.lab03.local ls03
 ```
+
 
 ### ✅ Verificación
 
@@ -215,7 +217,7 @@ ping -c 4 8.8.8.8              # Probar conectividad Internet
 hostname --fqdn                 # Debe mostrar: ls03.lab03.local
 ```
 
-![Configuración de red completada](/evidencias/02-configuracion/network-config.png)
+![Asegurate de los DNS](/evidencias/02-configuracion/hosts_serv.png)
 
 ---
 
