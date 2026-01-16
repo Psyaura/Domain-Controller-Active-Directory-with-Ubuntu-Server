@@ -426,7 +426,7 @@ sudo samba-tool user getgroups bob
 sudo samba-tool user show bob
 ```
 
-![Gestión de usuarios y OUs](/evidencias/03-usuarios-grupos/users-ous-structure.png)
+![Gestión de usuarios y OUs](/evidencias/03-usuarios-grupos/mover_usu_UO.png)
 
 ---
 
@@ -515,7 +515,7 @@ realm discover lab03.local
 sudo realm join lab03.local -U Administrator --verbose
 ```
 
-![Unión de cliente Ubuntu](/evidencias/04-clientes/ubuntu-join-domain.png)
+![Unión de cliente Ubuntu](/evidencias/04-clientes/realm_join.png)
 
 #### ✅ Verificación
 
