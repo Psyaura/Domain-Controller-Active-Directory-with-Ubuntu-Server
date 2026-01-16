@@ -248,7 +248,7 @@ Durante la instalación, se solicitará:
 - **KDC**: `ls03.lab03.local`
 - **Admin server**: `ls03.lab03.local`
 
-![Configuración Kerberos](/evidencias/02-configuracion/kerberos-config.png)
+![Configuración Kerberos](/evidencias/02-configuracion/krb.png)
 
 ### 🔧 Preparación del DNS
 
@@ -369,7 +369,7 @@ administrator@LAB03.LOCAL
     01/15/26 10:00:00  01/15/26 20:00:00  krbtgt/LAB03.LOCAL@LAB03.LOCAL
 ```
 
-![Verificación del DC](/evidencias/02-configuracion/dc-verification.png)
+![Verificación del DC](/evidencias/02-configuracion/kinit.png)
 
 ---
 
