@@ -42,4 +42,4 @@ Las siguientes capturas documentan este proceso:
 └── smbclient_show_net_folders.png      - Recursos compartidos netlogon y sysvol
 ```
 
-[⬅️ Anterior](02-configuracion-red.md) | [➡️ Siguiente](04-gestion-usuarios.md)
+[⬅️ Anterior: Configuración de Red](02-configuracion-red.md) | [📚 Índice](README.md) | [➡️ Siguiente: Gestión de Usuarios](04-gestion-usuarios.md)
