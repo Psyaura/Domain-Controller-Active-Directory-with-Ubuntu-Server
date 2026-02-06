@@ -97,7 +97,7 @@
     Añadir al final:
     ```
     # Disco dedicado para recursos compartidos Samba
-    UUID=a1b2c3d4-e5f6-7890-abcd-ef1234567890  /mnt/samba-data  ext4  defaults  0  2
+    UUID=a1b2c3d4-e5f6-7890-abcd-ef1234567890  /srv/samba  ext4  defaults  0  2
     ```
     
     Guardar y verificar:
