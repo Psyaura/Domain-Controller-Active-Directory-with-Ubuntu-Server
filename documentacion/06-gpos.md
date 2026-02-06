@@ -32,17 +32,23 @@
    samba-tool domain passwordsettings set --account-lockout-threshold=3
    ```
 
-**Evidencias:**
-- `admin_desde_cli.png`
-- `command_reset_sysvol.png`
-- `gpmc.msc.png`
-- `habilitar_politca_rsat.png`
-- `RSAT.png`
-- `RSAT_directivas.png`
-- `link_gpo.png`
-- `studen_policy_in_server_show.png`
-- `student_policy_from_server.png`
-- `denied_control panel.png`
+## 📸 Evidencias
+
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/05-gpos/
+├── admin_desde_cli.png                 - Creación de GPO desde línea de comandos
+├── command_reset_sysvol.png            - Comando samba-tool ntacl sysvolreset
+├── gpmc.msc.png                        - Consola de administración de directivas de grupo
+├── habilitar_politca_rsat.png          - Habilitación de política desde RSAT
+├── RSAT.png                            - Instalación de RSAT en Windows
+├── RSAT_directivas.png                 - Gestión de directivas desde RSAT
+├── link_gpo.png                        - Vinculación de GPO a OU con setlink
+├── studen_policy_in_server_show.png    - Student_Policy visible en el servidor
+├── student_policy_from_server.png      - Verificación de GPO desde servidor
+└── denied_control panel.png            - Panel de Control bloqueado por GPO
+```
 
 ---
+
 [⬅️ Anterior: Unión de Clientes](05-union-clientes.md) | [📚 Índice](README.md) | [➡️ Siguiente: Recursos Compartidos](07-recursos-compartidos.md)
