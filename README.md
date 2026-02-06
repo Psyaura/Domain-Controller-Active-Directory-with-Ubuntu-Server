@@ -713,7 +713,7 @@ sudo samba-tool domain passwordsettings set --account-lockout-duration=5
    Verificar:
    ```bash
    sudo mount -a
-   df -h | grep samba-data
+   df -h | grep samba
    ```
 
 ---
@@ -893,20 +893,20 @@ ls -la ~/StudentDocs
 
 ```bash
 # Ver uso del disco de datos
-df -h /mnt/samba-data
+df -h /srv/samba
 
 # Ver estructura completa
-tree -L 2 /mnt/samba-data
+tree -L 2 /srv/samba
 
 # Salida esperada:
-# /mnt/samba-data
+# /srv/samba
 # ├── StudentDocs
 # ├── ITDocs
 # ├── HRDocs
 # └── Public
 
 # Verificar permisos
-ls -la /mnt/samba-data/
+ls -la /srv/samba
 
 # Debe mostrar los grupos correctos y permisos 3770
 ```
