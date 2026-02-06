@@ -291,28 +291,40 @@ sudo nano /etc/security/pam_mount.conf.xml
 
 Contenido (configurar montaje por grupo):
 ```xml
-
-
-
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE pam_mount SYSTEM "pam_mount.conf.xml.dtd">
+<pam_mount>
+    <debug enable="1" />
     
+    <!-- Montaje para Students -->
+    <volume user="*" sgrp="students@lab03.local" 
+            fstype="cifs" 
+            server="lab03.local" 
+            path="StudentDocs" 
+            mountpoint="~/StudentDocs" 
+            options="sec=ntlmssp,cruid=%(USERUID),uid=%(USERUID),gid=%(USERGID),file_mode=0700,dir_mode=0700" />
     
+    <!-- Montaje para IT_Admins -->
+    <volume user="*" sgrp="it_admins@lab03.local" 
+            fstype="cifs" 
+            server="lab03.local" 
+            path="ITDocs" 
+            mountpoint="~/ITDocs" 
+            options="sec=ntlmssp,cruid=%(USERUID),uid=%(USERUID),gid=%(USERGID),file_mode=0700,dir_mode=0700" />
     
+    <!-- Montaje para todos los usuarios del dominio -->
+    <volume user="*" sgrp="domain users@lab03.local" 
+            fstype="cifs" 
+            server="lab03.local" 
+            path="Public" 
+            mountpoint="~/Public" 
+            options="sec=ntlmssp,cruid=%(USERUID),uid=%(USERUID),gid=%(USERGID),file_mode=0700,dir_mode=0700" />
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
+    <mntoptions allow="nosuid,nodev,loop,encryption,fsck,nonempty,allow_root,allow_other" />
+    <mntoptions require="nosuid,nodev" />
+    <logout wait="0" hup="no" term="no" kill="no" />
+    <mkmountpoint enable="1" remove="true" />
+</pam_mount>
 ```
 
 #### Verificar montaje automático:
