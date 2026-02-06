@@ -1,4 +1,4 @@
- 07 - Recursos Compartidos y Permisos con Disco Dedicado
+# 07 - Recursos Compartidos y Permisos con Disco Dedicado
 
 ## 📋 Índice
 - [Objetivo](#objetivo)
