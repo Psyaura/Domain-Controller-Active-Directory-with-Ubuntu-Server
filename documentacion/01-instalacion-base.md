@@ -43,12 +43,15 @@
    - VM extremadamente lenta
    - SSH no responde
 
-**Evidencias:**
-- `Instalacion Linux Vbox.png`
-- `Configuracion discos.png`
-- [RECOMENDADO] ssh-enabled.png
-- [RECOMENDADO] ubuntu-boot.png
+## 📸 Evidencias
 
----
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/01-instalacion/
+├── Instalacion Linux Vbox.png          - Configuración de la VM en VirtualBox
+├── Configuracion discos.png            - Configuración del disco duro virtual
+├── ssh-enabled.png             [RECOMENDADO] - OpenSSH Server marcado durante instalación
+└── ubuntu-boot.png             [RECOMENDADO] - Primer arranque exitoso del servidor
+```
 
 [📚 Índice](README.md) | [➡️ Siguiente: Configuración de Red](02-configuracion-red.md)
