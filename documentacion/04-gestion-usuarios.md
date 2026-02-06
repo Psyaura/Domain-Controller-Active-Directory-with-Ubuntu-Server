@@ -21,12 +21,18 @@
 - samba-tool domain passwordsettings show
 - samba-tool domain passwordsettings set --min-pwd-length=8
 
-## Evidencias
-📂 evidencias/03-usuarios-grupos/
-- crear_usuarios.png
-- crear_grupos.png
-- Creacion_OU.png
-- meter_usu_grupos.png
-- mover_usu_OU.png
+## 📸 Evidencias
 
-[⬅️ Anterior](03-samba-ad-dc.md) | [➡️ Siguiente](05-union-clientes.md)
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/03-usuarios-grupos/
+├── crear_usuarios.png                  - Creación de usuarios con samba-tool user create
+├── crear_grupos.png                    - Creación de grupos de seguridad
+├── Creacion_OU.png                     - Creación de Unidades Organizativas (OUs)
+├── meter_usu_grupos.png                - Añadir usuarios a grupos con addmembers
+└── mover_usu_OU.png                    - Mover usuarios a sus OUs correspondientes
+```
+
+---
+
+[⬅️ Anterior: Samba AD DC](03-samba-ad-dc.md) | [📚 Índice](README.md) | [➡️ Siguiente: Unión de Clientes](05-union-clientes.md)
