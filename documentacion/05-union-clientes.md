@@ -20,12 +20,17 @@
    - Unión al dominio desde Panel de Control
    - Instalación RSAT para gpmc.msc
 
-**Evidencias:**
-- `realm_discover.png`
-- `realm_join.png`
-- `realm_list.png`
-- `id_comprobacion.png`
-- `pam_sesion_grafica.png`
+## 📸 Evidencias
+
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/04-clientes/
+├── realm_discover.png                  - Descubrimiento del dominio lab03.local
+├── realm_join.png                      - Unión del cliente Ubuntu al dominio
+├── realm_list.png                      - Verificación de dominio unido
+├── id_comprobacion.png                 - Comando id verificando usuario del dominio
+└── pam_sesion_grafica.png              - Login gráfico con usuario del dominio
+```
 
 ---
 
