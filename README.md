@@ -650,6 +650,73 @@ sudo samba-tool domain passwordsettings set --account-lockout-duration=5
 
 ## 9. Recursos Compartidos y Permisos
 
+### 💾 Añadir Disco Dedicado para Almacenamiento
+
+#### En VirtualBox (VM apagada):
+
+1. **Crear disco virtual**:
+   ```
+   VirtualBox → Seleccionar VM "ls03" → Settings → Storage
+   Controller: SATA → Click en icono "+" → Create new disk
+   ```
+
+2. **Configuración**:
+   - Tipo: VDI (VirtualBox Disk Image)
+   - Storage: Dynamically allocated
+   - Tamaño: **50 GB**
+   - Nombre: `ls03-data.vdi`
+
+#### En Ubuntu Server (arrancar VM):
+
+3. **Identificar el nuevo disco**:
+   ```bash
+   lsblk
+   ```
+   
+   Salida esperada:
+   ```
+   sdb      8:16   0   50G  0 disk     ← NUEVO DISCO
+   ```
+
+4. **Particionar**:
+   ```bash
+   sudo fdisk /dev/sdb
+   ```
+   
+   Comandos: `n` → `p` → `1` → `[Enter]` → `[Enter]` → `w`
+
+5. **Formatear**:
+   ```bash
+   sudo mkfs.ext4 /dev/sdb1
+   ```
+
+6. **Crear punto de montaje**:
+   ```bash
+   sudo mkdir -p /srv/samba
+   ```
+
+7. **Configurar montaje automático** (`/etc/fstab`):
+   ```bash
+   # Obtener UUID
+   sudo blkid /dev/sdb1
+   
+   # Editar fstab
+   sudo nano /etc/fstab
+   ```
+   
+   Añadir:
+   ```
+   # Disco dedicado para recursos compartidos Samba
+   UUID=a1b2c3d4-e5f6-7890-abcd-ef1234567890  /srv/samba  ext4  defaults  0  2
+   ```
+   
+   Verificar:
+   ```bash
+   sudo mount -a
+   df -h | grep samba-data
+   ```
+
+---
 ### 📁 Preparación del Servidor
 
 #### 1. Crear Estructura de Directorios
@@ -689,6 +756,7 @@ sudo chmod 3770 /srv/samba/ITDocs
 sudo chown :"Domain Users" /srv/samba/Public
 sudo chmod 3777 /srv/samba/Public
 ```
+---
 
 **Explicación de permisos (3770)**:
 - **3**: SetGID + Sticky Bit (hereda grupo + protege borrado)
@@ -749,7 +817,7 @@ sudo smbcontrol all reload-config
 ### 🪟 Gestión de ACLs desde Windows
 
 1. Desde el cliente Windows, abrir **Explorador de archivos**
-2. Conectar a `\\lab03.local` o `\\172.30.20.32`
+2. Conectar a `\\lab03.local` o `(IP-SERVIDOR)`
 3. Click derecho en carpeta → **Propiedades** → **Seguridad**
 4. **Editar** → Añadir grupos y configurar permisos
 
@@ -820,6 +888,42 @@ mount | grep cifs
 # Listar archivos
 ls -la ~/StudentDocs
 ```
+
+### 📊 Verificación del Sistema de Almacenamiento
+
+```bash
+# Ver uso del disco de datos
+df -h /mnt/samba-data
+
+# Ver estructura completa
+tree -L 2 /mnt/samba-data
+
+# Salida esperada:
+# /mnt/samba-data
+# ├── StudentDocs
+# ├── ITDocs
+# ├── HRDocs
+# └── Public
+
+# Verificar permisos
+ls -la /mnt/samba-data/
+
+# Debe mostrar los grupos correctos y permisos 3770
+```
+
+---
+
+### 🎯 Ventajas del Disco Dedicado
+
+| Ventaja | Descripción |
+|---------|-------------|
+| **Separación de Datos** | Sistema operativo y datos en discos diferentes |
+| **Escalabilidad** | Fácil aumentar capacidad o añadir más discos |
+| **Backup Selectivo** | Respaldar solo los datos sin el sistema |
+| **Rendimiento** | Reduce la carga de I/O en el disco del sistema |
+| **Producción Real** | Configuración profesional usada en entornos empresariales |
+
+---
 
 ![Montaje automático en Linux](/evidencias/06-recursos/linux-auto-mount.png)
 
