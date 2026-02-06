@@ -39,12 +39,17 @@
    kill -9 <PID>   # Terminar
    ```
 
-**Evidencias:**
-- `backup.png`
-- `htop.png`
-- `ssh_cliente_bob.png`
-- `top-bash.png`
-- `stop_sl.png`
+## 📸 Evidencias
+
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/08-auditoria/
+├── backup.png                          - Script de backup ejecutado y verificado
+├── htop.png                            - Monitorización de procesos Samba con htop
+├── ssh_cliente_bob.png                 - Conexión SSH remota al cliente como bob
+├── top-bash.png                        - Comando top mostrando procesos del sistema
+└── stop_sl.png                         - Proceso pausado/reanudado con kill
+```
 
 ---
 [⬅️ Anterior: Auditoría](09-auditoria.md) | [📚 Índice](README.md)
