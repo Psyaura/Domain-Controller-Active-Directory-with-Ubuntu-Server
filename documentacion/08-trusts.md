@@ -40,17 +40,22 @@
    smbclient //ls03trust.lab03trust.local/StudentDocs -U bob@lab03.local -W LAB03
    ```
 
-**Evidencias:**
-- `netplan_ls03trust.png`
-- `etc_hosts_trust.png`
-- `hosts_final.png`
-- `krb_lab03trust.png`
-- `serv_adm_kerb_lab03trust.png`
-- `serv_kerb_lab03trust.png`
-- `krb_serv2_cli.png`
-- `forwarders_ls03.png`
-- `output_interactive_trust.png`
-- `verif_samba_ad_cd_trust.png`
+## 📸 Evidencias
+
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/07-trusts/
+├── netplan_ls03trust.png               - Configuración de red del segundo DC (ls03trust)
+├── etc_hosts_trust.png                 - Archivo /etc/hosts con ambos dominios
+├── hosts_final.png                     - Configuración final de hosts en ambos servidores
+├── krb_lab03trust.png                  - Configuración Kerberos del dominio lab03trust.local
+├── serv_adm_kerb_lab03trust.png        - Servidor admin Kerberos para trust
+├── serv_kerb_lab03trust.png            - Servidor Kerberos del dominio trust
+├── krb_serv2_cli.png                   - CLI segundo servidor Kerberos
+├── forwarders_ls03.png                 - Reenviadores DNS condicionales configurados
+├── output_interactive_trust.png        - Salida del comando domain trust create
+└── verif_samba_ad_cd_trust.png         - Verificación del trust con trust validate
+```
 
 ---
 [⬅️ Anterior: Recursos Compartidos](07-recursos-compartidos.md) | [📚 Índice](README.md) | [➡️ Siguiente: Auditoría](09-auditoria.md)
