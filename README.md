@@ -663,8 +663,8 @@ sudo samba-tool domain passwordsettings set --account-lockout-duration=5
 2. **Configuración**:
    - Tipo: VDI (VirtualBox Disk Image)
    - Storage: Dynamically allocated
-   - Tamaño: **50 GB**
-   - Nombre: `ls03-data.vdi`
+   - Tamaño: **15 GB**
+   - Nombre: `Linux Server AD_1.vdi`
 
 #### En Ubuntu Server (arrancar VM):
 
@@ -675,7 +675,7 @@ sudo samba-tool domain passwordsettings set --account-lockout-duration=5
    
    Salida esperada:
    ```
-   sdb      8:16   0   50G  0 disk     ← NUEVO DISCO
+   sdb      8:16   0   15G  0 disk     ← NUEVO DISCO
    ```
 
 4. **Particionar**:
