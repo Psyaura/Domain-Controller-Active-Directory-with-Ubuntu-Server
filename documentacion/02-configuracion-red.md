@@ -77,15 +77,18 @@
    ping -c 4 8.8.8.8
    ```
 
-**Evidencias:**
-- `netplan_ls03trust.png` (o equivalente para ls03)
-- `Cambiar-el-nombre-host.png`
-- `hosts_cli.png`
-- `red_interna_cli.png`
-- `resolv_cli.png`
-- `etc-resolv.png`
-- `hosts_final.png`
+## 📸 Evidencias
 
----
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/02-configuracion/
+├── netplan_ls03trust.png               - Configuración de Netplan (IP estática)
+├── Cambiar-el-nombre-host.png          - Comando hostnamectl set-hostname
+├── hosts_cli.png                       - Contenido del archivo /etc/hosts
+├── red_interna_cli.png                 - Configuración del adaptador enp0s8
+├── resolv_cli.png                      - Archivo /etc/resolv.conf
+├── etc-resolv.png                      - Configuración DNS del sistema
+└── hosts_final.png                     - Archivo /etc/hosts configurado definitivamente
+```
 
 [⬅️ Anterior: Instalación Base](01-instalacion-base.md) | [📚 Índice](README.md) | [➡️ Siguiente: Samba AD DC](03-samba-ad-dc.md)
