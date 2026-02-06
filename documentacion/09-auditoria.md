@@ -42,10 +42,15 @@
    sudo samba-tool domain passwordsettings set --min-pwd-length=10
    ```
 
-**Evidencias:**
-- `prep_auditoria.png`
-- `smb_conf_audit.png`
-- `smb_audit_log.png`
+## 📸 Evidencias
+
+Las siguientes capturas documentan este proceso:
+```
+📂 evidencias/08-auditoria/
+├── prep_auditoria.png                  - Preparación del sistema de auditoría
+├── smb_conf_audit.png                  - Configuración de full_audit en smb.conf
+└── smb_audit_log.png                   - Logs de auditoría en /var/log/samba_audit.log
+```
 
 ---
 [⬅️ Anterior: Trusts](08-trusts.md) | [📚 Índice](README.md) | [➡️ Siguiente: Automatización](10-automatizacion.md)
