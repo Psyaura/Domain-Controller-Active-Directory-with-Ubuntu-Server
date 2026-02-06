@@ -385,7 +385,7 @@ sudo chmod 3770 /srv/samba/StudentDocs
 **Solución**:
 ```bash
 # Verificar fstab
-cat /etc/fstab | grep samba-data
+cat /etc/fstab | grep samba
 
 # Montar manualmente para probar
 sudo mount -a
@@ -443,15 +443,6 @@ Las siguientes capturas documentan este proceso:
 ✅ **Rendimiento**: Reduce la carga de I/O en el disco del sistema  
 ✅ **Realismo**: Así se hace en producción real  
 
----
-
-## ➡️ Próximos Pasos
-
-1. ✅ **Configurar confianzas de dominio**
-   - Ver: [08-trusts.md](08-trusts.md)
-
-2. ✅ **Implementar auditoría de archivos**
-   - Ver: [09-auditoria.md](09-auditoria.md)
 
 ---
 
