@@ -174,6 +174,7 @@ network:
 ![Configuración de red VirtualBox](/evidencias/02-configuracion/netplan_serv.png)
 
 **Aplicar cambios**:
+samba-tool domain level show
 
 ```bash
 sudo netplan apply
@@ -347,14 +348,14 @@ sudo systemctl start samba-ad-dc
 
 ```bash
 # Ver nivel del dominio
-samba-tool domain level show
+sudo samba-tool domain level show
 
 # Verificar DNS (registros SRV)
 host -t SRV _ldap._tcp.lab03.local
 host -t SRV _kerberos._tcp.lab03.local
 
 # Listar usuarios del dominio
-samba-tool user list
+sudo samba-tool user list
 
 # Probar autenticación Kerberos
 kinit administrator
