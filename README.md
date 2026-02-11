@@ -99,7 +99,16 @@ Domain-Controller-Active-Directory-with-Ubuntu-Server/
 
 ### 🖥️ Especificaciones de la VM (Servidor DC01)
 
-| Componente | Especificación |
+| Componente | Especificación |# Crear grupos de seguridad
+sudo samba-tool group add IT_Admins
+sudo samba-tool group add Students
+
+# Añadir usuarios a grupos
+sudo samba-tool group addmembers Students bob,charlie
+sudo samba-tool group addmembers IT_Admins alice
+
+# Ver miembros de un grupo
+sudo samba-tool group listmembers Students
 |------------|----------------|
 | **RAM** | 4 GB |
 | **CPU** | 2 núcleos |
@@ -126,7 +135,16 @@ La VM debe tener **dos adaptadores de red**:
 ## 2. Instalación de Ubuntu Server
 
 ### 📝 Pasos Durante la Instalación
+# Crear grupos de seguridad
+sudo samba-tool group add IT_Admins
+sudo samba-tool group add Students
 
+# Añadir usuarios a grupos
+sudo samba-tool group addmembers Students bob,charlie
+sudo samba-tool group addmembers IT_Admins alice
+
+# Ver miembros de un grupo
+sudo samba-tool group listmembers Students
 1. **Seleccionar ISO**: Ubuntu Server 24.04 LTS
 2. **Configuración de almacenamiento**: Usar disco completo (20 GB)
 3. **Perfil de usuario**: Crear usuario administrador local
@@ -147,7 +165,16 @@ Tras la instalación, el sistema debe:
 ## 3. Configuración de Red
 
 ### 🔧 Configuración IP Estática con Netplan
+# Crear grupos de seguridad
+sudo samba-tool group add IT_Admins
+sudo samba-tool group add Students
 
+# Añadir usuarios a grupos
+sudo samba-tool group addmembers Students bob,charlie
+sudo samba-tool group addmembers IT_Admins alice
+
+# Ver miembros de un grupo
+sudo samba-tool group listmembers Students
 Editar el archivo de configuración de red:
 
 ```bash
@@ -385,7 +412,7 @@ sudo samba-tool user create bob "admin_21"
 sudo samba-tool user create charlie "admin_21"
 
 # Listar usuarios
-samba-tool user list
+sudo samba-tool user list
 ```
 
 ### 👥 Creación de Grupos
