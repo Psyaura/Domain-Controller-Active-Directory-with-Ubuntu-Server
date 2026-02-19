@@ -259,7 +259,7 @@ sudo nano /etc/resolv.conf
 Contenido:
 
 ```
-nameserver 172.30.20.32
+nameserver 192.168.1.2
 search lab03.local
 ```
 
