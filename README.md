@@ -138,16 +138,6 @@ Tras la instalación, el sistema debe:
 ## 3. Configuración de Red
 
 ### 🔧 Configuración IP Estática con Netplan
-# Crear grupos de seguridad
-sudo samba-tool group add IT_Admins
-sudo samba-tool group add Students
-
-# Añadir usuarios a grupos
-sudo samba-tool group addmembers Students bob,charlie
-sudo samba-tool group addmembers IT_Admins alice
-
-# Ver miembros de un grupo
-sudo samba-tool group listmembers Students
 Editar el archivo de configuración de red:
 
 ```bash
