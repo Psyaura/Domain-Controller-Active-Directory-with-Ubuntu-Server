@@ -478,7 +478,7 @@ sudo nano /etc/resolv.conf
 ```
 
 ```
-nameserver 172.30.20.32    # IP del DC
+nameserver 192.168.1.2    # IP del DC - RED INTERNA
 search lab03.local
 ```
 
@@ -491,7 +491,7 @@ sudo nano /etc/hosts
 ```
 127.0.0.1       localhost
 127.0.1.1       lc03
-172.30.20.32    ls03.lab03.local ls03
+192.168.1.2    ls03.lab03.local ls03
 ```
 
 **3. Kerberos (/etc/krb5.conf)**
