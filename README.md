@@ -99,24 +99,6 @@ Domain-Controller-Active-Directory-with-Ubuntu-Server/
 
 ### 🖥️ Especificaciones de la VM (Servidor DC01)
 
-| Componente | Especificación |# Crear grupos de seguridad
-sudo samba-tool group add IT_Admins
-sudo samba-tool group add Students
-
-# Añadir usuarios a grupos
-sudo samba-tool group addmembers Students bob,charlie
-sudo samba-tool group addmembers IT_Admins alice
-
-# Ver miembros de un grupo
-sudo samba-tool group listmembers Students
-|------------|----------------|
-| **RAM** | 4 GB |
-| **CPU** | 2 núcleos |
-| **Disco Duro** | 20 GB |
-| **Sistema Operativo** | Ubuntu Server 24.04 LTS |
-| **Hostname** | ls03 |
-| **Dominio** | lab03.local |
-
 ### 🌐 Configuración de Red en VirtualBox
 
 La VM debe tener **dos adaptadores de red**:
@@ -133,15 +115,6 @@ La VM debe tener **dos adaptadores de red**:
 ---
 
 ## 2. Instalación de Ubuntu Server
-
-### 📝 Pasos Durante la Instalación
-# Crear grupos de seguridad
-sudo samba-tool group add IT_Admins
-sudo samba-tool group add Students
-
-# Añadir usuarios a grupos
-sudo samba-tool group addmembers Students bob,charlie
-sudo samba-tool group addmembers IT_Admins alice
 
 # Ver miembros de un grupo
 sudo samba-tool group listmembers Students
