@@ -434,6 +434,33 @@ sudo samba-tool user show bob
 | **RAM** | 2 GB |
 | **Red** | Red Interna (`intnet`) |
 
+
+#### Configuración de Red
+
+**Editar el archivo de configuración de red**:
+
+```bash
+sudo nano /etc/netplan/00-installer-config.yaml(o el archivo que tu sistema cree)
+```
+
+**Configuración recomendada**:
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    enp0s3:  # Adaptador de red interna
+      dhcp4: true
+    enp0s8:
+      dhcp4: false
+      addresses:
+        - 192.168.1.3/24
+      nameservers:
+        addresses:
+          - 192.168.1.2
+
+```
+
 #### 📦 Instalación de Paquetes
 
 ```bash
