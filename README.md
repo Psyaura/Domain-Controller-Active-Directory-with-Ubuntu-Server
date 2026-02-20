@@ -646,8 +646,6 @@ sudo samba-tool ntacl sysvolreset
 
 **Configuración**: "Prohibit access to Control Panel and PC settings" → **Enabled**
 
-![Edición de GPO en Windows](/evidencias/05-gpos/gpo-edit-windows.png)
-
 ### 🐧 Aplicación en Cliente Linux
 
 **Nota importante**: Las políticas de registro de Windows (Registry.pol) **NO se aplican** en clientes Linux (GNOME/SSSD). Sin embargo, las políticas de **seguridad** y **contraseñas** sí se aplican.
@@ -663,8 +661,6 @@ gpresult /r
 ```
 
 Intentar abrir Panel de Control → Debería aparecer mensaje de error: "Esta operación ha sido cancelada..."
-
-![GPO aplicada en Windows](/evidencias/05-gpos/gpo-blocked-control-panel.png)
 
 ### 🔐 Políticas de Contraseñas y Seguridad
 
