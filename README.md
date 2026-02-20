@@ -252,6 +252,12 @@ Si durante la instalación, hay algun parametro no correcto:
 ```bash
 sudo dpkg-reconfigure krb5-config
 ```
+Restaurar valores por defecto (reset total)
+
+```bash
+sudo apt purge krb5-user krb5-config -y
+sudo apt install krb5-user
+```
 
 ### 🔧 Preparación del DNS
 
