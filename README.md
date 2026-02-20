@@ -150,15 +150,21 @@ sudo nano /etc/netplan/00-installer-config.yaml(o el archivo que tu sistema cree
 network:
   version: 2
   ethernets:
-    enp0s3:  # Adaptador de red interna
+    enp0s3:
       dhcp4: no
       addresses:
-        - 172.30.20.32/25
-      gateway4: 172.30.20.1
+        - 192.168.1.45/24
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses:
+         - 8.8.8.8
+    enp0s8:
+      dhcp4: no
+      addresses:
+        - 192.168.2.45/24
       nameservers:
         addresses:
          - 127.0.0.1      # DNS local (Samba)
-         - 10.239.3.7     # DNS secundario (opcional)
 ```
 
 ![Configuración de red VirtualBox](/evidencias/02-configuracion/netplan_serv.png)
