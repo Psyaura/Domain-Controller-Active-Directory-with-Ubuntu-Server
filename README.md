@@ -247,6 +247,12 @@ Durante la instalación, se solicitará:
 
 ![Configuración Kerberos](/evidencias/02-configuracion/krb.png)
 
+Si durante la instalación, hay algun parametro no correcto:
+
+```bash
+sudo dpkg-reconfigure krb5-config
+```
+
 ### 🔧 Preparación del DNS
 
 Samba necesita controlar el puerto 53. Desactivar el resolver de Ubuntu:
