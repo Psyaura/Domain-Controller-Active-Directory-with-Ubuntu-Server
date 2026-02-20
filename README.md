@@ -605,13 +605,11 @@ Para gestionar GPOs desde Windows:
 2. **Agregar una característica**
 3. Buscar e instalar: **RSAT: Group Policy Management Tools**
 
-![Cliente Windows unido al dominio](/evidencias/04-clientes/windows-join-domain.png)
-
 ---
 
-## 8. Configuración de GPOs
+## 8. Configuración de GPOs desde Ubuntu Server
 
-### 🎯 Creación de GPO desde Linux
+### 🎯 Creación de GPO
 
 ```bash
 # Crear nueva GPO
