@@ -582,7 +582,7 @@ session  required  pam_mkhomedir.so skel=/etc/skel umask=0077
 
 ![Login gráfico con usuario del dominio](/evidencias/04-clientes/ubuntu-graphical-login.png)
 
-### 💻 Cliente Windows
+### 💻 Cliente Windows (if needed)
 
 #### 📋 Requisitos Previos
 
