@@ -317,7 +317,6 @@ sudo samba-tool domain provision --use-rfc2307 --interactive
 | **DNS forwarder** | `10.239.3.7` | DNS externo para resolución |
 | **Administrator password** | (elegir contraseña segura) | Mínimo 8 caracteres |
 
-![Provisión del dominio](/evidencias/02-configuracion/domain-provision.png)
 
 ### ⚙️ Ajustes Finales
 
@@ -511,6 +510,7 @@ sudo nano /etc/hosts
 127.0.1.1       lc03
 192.168.1.2    ls03.lab03.local ls03
 ```
+![Archivo configurado](/evidencias/02-configuracion/hosts_cli.png)
 
 **3. Kerberos (/etc/krb5.conf)**
 
