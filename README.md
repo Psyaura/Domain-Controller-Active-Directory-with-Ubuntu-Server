@@ -491,21 +491,16 @@ sudo apt install realmd sssd sssd-tools samba-common krb5-user \
 **1. DNS (/etc/resolv.conf)**
 
 ```bash
-sudo nano /etc/resolv.conf
-```
-
-```
+# sudo nano /etc/resolv.conf
 nameserver 192.168.1.2    # IP del DC - RED INTERNA
 search lab03.local
 ```
+![Archivo configurado](/evidencias/02-configuracion/resolv_cli.png)
 
 **2. Hosts (/etc/hosts)**
 
 ```bash
-sudo nano /etc/hosts
-```
-
-```
+# sudo nano /etc/hosts
 127.0.0.1       localhost
 127.0.1.1       lc03
 192.168.1.2    ls03.lab03.local ls03
@@ -514,11 +509,11 @@ sudo nano /etc/hosts
 
 **3. Kerberos (/etc/krb5.conf)**
 
-```bash
-sudo nano /etc/krb5.conf
-```
 
 ```ini
+
+# sudo nano /etc/krb5.conf
+
 [libdefaults]
     default_realm = LAB03.LOCAL
     dns_lookup_realm = false
@@ -746,7 +741,6 @@ sudo samba-tool domain passwordsettings set --account-lockout-duration=5
    df -h | grep samba
    ```
 
----
 ### 📁 Preparación del Servidor
 
 #### 1. Crear Estructura de Directorios
@@ -757,23 +751,7 @@ sudo mkdir -p /srv/samba/HRDocs
 sudo mkdir -p /srv/samba/ITDocs
 sudo mkdir -p /srv/samba/Public
 ```
-
-#### 2. Instalar Librerias Winbind (si es necesario)
-
-```bash
-sudo apt-get install libnss-winbind libpam-winbind
-sudo ldconfig
-```
-
-Editar `/etc/samba/smb.conf` en la sección `[global]`:
-
-```ini
-winbind use default domain = yes
-template shell = /bin/bash
-template homedir = /home/%U
-```
-
-#### 3. Configurar Permisos Base
+#### 2. Configurar Permisos Base
 
 ```bash
 # Asignar grupo propietario y permisos
@@ -785,6 +763,66 @@ sudo chmod 3770 /srv/samba/ITDocs
 
 sudo chown :"Domain Users" /srv/samba/Public
 sudo chmod 3777 /srv/samba/Public
+```
+## 🔧 Solución de Problemas: Error "Domain Users Group"
+
+### ❌ Síntoma del Error
+
+Si al intentar configurar permisos aparece este error:
+
+![Error Domain Users Group](/evidencias/06-recursos/error_domain_users_group.png)
+
+### 🔍 Causa del Problema
+
+**NSS (Name Service Switch) no puede resolver grupos de AD** porque las librerías Winbind no están instaladas o configuradas correctamente.
+
+> **⚠️ Importante**: Sin estas librerías, Linux es "ciego" a los usuarios y grupos de Active Directory, aunque Samba esté funcionando. El servidor Samba puede autenticar usuarios, pero el sistema operativo Linux no los reconoce para operaciones de filesystem.
+
+### ✅ Solución
+
+#### 1. Instalar Librerías Winbind
+```bash
+sudo apt-get install libnss-winbind libpam-winbind
+sudo ldconfig
+```
+
+**Explicación de los paquetes**:
+- `libnss-winbind`: Permite a Linux resolver usuarios/grupos de AD mediante NSS
+- `libpam-winbind`: Permite autenticación PAM con credenciales de AD
+- `ldconfig`: Actualiza el caché de librerías compartidas
+
+#### 2. Configurar Winbind en Samba
+
+Editar `/etc/samba/smb.conf` en la sección `[global]`:
+```bash
+sudo nano /etc/samba/smb.conf
+```
+
+Añadir o verificar estas líneas:
+```ini
+[global]
+    # ... configuración existente ...
+    
+    # Configuración de Winbind
+    winbind use default domain = yes
+    template shell = /bin/bash
+    template homedir = /home/%U
+```
+
+**Explicación de los parámetros**:
+- `winbind use default domain = yes`: Permite usar solo el nombre de usuario sin el dominio
+- `template shell = /bin/bash`: Shell por defecto para usuarios de AD
+- `template homedir = /home/%U`: Directorio home automático basado en username
+
+#### 3. Reiniciar Servicios
+```bash
+sudo systemctl restart samba-ad-dc
+```
+
+#### 4. Verificar Resolución de Grupos
+```bash
+# Verificar que Linux puede ver el grupo Domain Users
+getent group "Domain Users"
 ```
 ---
 
