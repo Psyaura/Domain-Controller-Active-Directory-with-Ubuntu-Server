@@ -832,6 +832,17 @@ Añadir o verificar estas líneas:
 ```bash
 sudo systemctl restart samba-ad-dc
 ```
+⚠️Si no funciona ⚠️
+> Verifica cómo está configurado el NSS
+```bash
+cat /etc/nsswitch.conf | grep -E "passwd|group"
+```
+
+> Debe tener `winbind` en la línea de group:
+```bash
+passwd:         files systemd winbind
+group:          files systemd winbind
+```
 
 #### 4. Verificar Resolución de Grupos
 ```bash
