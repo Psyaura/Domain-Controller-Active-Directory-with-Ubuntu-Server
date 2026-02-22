@@ -1,4 +1,4 @@
-## 📄 01-instalacion-base.md
+## 📄 01-Installing.md
 
 ### Main Sections:
 
