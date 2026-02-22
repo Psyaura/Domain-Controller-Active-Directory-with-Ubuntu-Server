@@ -507,8 +507,16 @@ search lab03.local
 ```
 ![Archivo configurado](/evidencias/02-configuracion/hosts_cli.png)
 
-**3. Kerberos (/etc/krb5.conf)**
+**3. Kerberos (krb5.conf) | No es necesario en este tipo de cliente**
 
+> ⚠️ **¿Cuándo editar `/etc/krb5.conf` manualmente en el cliente?**
+>
+> En un cliente unido al dominio con `realm join` **no es necesario tocarlo**. Solo hace falta editarlo en estos casos:
+>
+> - El cliente necesita acceder a recursos del **dominio remoto** (ej: cliente de `lab03.local` monta carpetas de `lab04.local`)
+> - `realm join` no generó el `krb5.conf` correctamente
+> - El DNS no resuelve los registros SRV y hay que **hardcodear el KDC**
+> - El cliente usa `kinit` manualmente contra dominios externos
 
 ```ini
 
