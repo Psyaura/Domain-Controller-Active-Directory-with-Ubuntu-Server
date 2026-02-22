@@ -31,3 +31,15 @@
 ## 📸 Evidence
 
 The following screenshots document this process:
+```
+📂 evidencias/03-usuarios-grupos/
+├── crear_usuarios.png                  - User creation with samba-tool user create
+├── crear_grupos.png                    - Security group creation
+├── Creacion_OU.png                     - Organizational Units (OUs) creation
+├── meter_usu_grupos.png                - Adding users to groups with addmembers
+└── mover_usu_OU.png                    - Moving users to their corresponding OUs
+```
+
+---
+
+[⬅️ Previous: Samba AD DC](03-Samba-AD-DC.md) | [📚 Index](README.md) | [➡️ Next: Client Joining](05-Client-joining.md)
