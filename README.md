@@ -99,6 +99,16 @@ Domain-Controller-Active-Directory-with-Ubuntu-Server/
 
 ### 🖥️ VM Specifications (DC01 Server)
 
+| Component | Value |
+|-----------|-------|
+| **VM Name** | ls03 |
+| **OS** | Ubuntu Server 24.04 LTS |
+| **RAM** | 4 GB |
+| **CPU** | 2 cores |
+| **Hard Disk** | 20 GB (VDI, Dynamically allocated) |
+| **Network Adapter 1** | NAT/Bridge (Internet) |
+| **Network Adapter 2** | Internal Network (intnet) - 192.168.1.45/24 |
+
 ### 🌐 VirtualBox Network Configuration
 
 The VM must have **two network adapters**:
