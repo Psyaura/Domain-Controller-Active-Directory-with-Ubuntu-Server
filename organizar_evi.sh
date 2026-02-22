@@ -23,7 +23,7 @@ BASE_DIR="evidencias"     # Directorio base donde crear estructura
 # Verificar que existe el directorio de origen
 if [ ! -d "$SOURCE_DIR" ]; then
     echo -e "${RED}❌ Error: No existe el directorio '$SOURCE_DIR'${NC}"
-    echo "Por favor, asegúrate de que tus capturas están en la carpeta 'evidencias/'"
+    echo "Por favor, asegúrate de que tus capturas están en la carpeta 'evidence/'"
     exit 1
 fi
 
@@ -227,7 +227,7 @@ echo "2. Añade más capturas si faltan (consulta los README.md en cada carpeta)
 echo "3. Actualiza los checkboxes en cada README.md"
 echo "4. Commit y push a GitHub:"
 echo ""
-echo "   git add evidencias/"
+echo "   git add evidence/"
 echo "   git commit -m 'docs: Organizar evidencias del proyecto'"
 echo "   git push origin main"
 echo ""
