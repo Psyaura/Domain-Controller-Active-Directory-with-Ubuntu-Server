@@ -1,150 +1,148 @@
-# 🖥️ Domain Controller Active Directory con Ubuntu Server + Samba4
+# 🖥️ Active Directory Domain Controller with Ubuntu Server + Samba4
 
 [![Ubuntu Server](https://img.shields.io/badge/Ubuntu%20Server-24.04%20LTS-E95420?logo=ubuntu)](https://ubuntu.com/)
 [![Samba](https://img.shields.io/badge/Samba-4.x-A80030?logo=samba)](https://www.samba.org/)
 [![Active Directory](https://img.shields.io/badge/Active%20Directory-Compatible-0078D4?logo=microsoft)](https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/)
 [![License](https://img.shields.io/badge/License-Educational-green)](LICENSE)
 
-## 📌 Descripción del Proyecto
+## 📌 Project Description
 
-Este proyecto documenta la implementación completa de un **Controlador de Dominio (Domain Controller)** basado en **Ubuntu Server** utilizando **Samba Active Directory**. El objetivo es crear un entorno de autenticación centralizada completamente funcional que permita gestionar usuarios, grupos, políticas (GPOs), recursos compartidos y confianzas de dominio dentro de una red empresarial simulada.
+This project documents the complete implementation of a **Domain Controller** based on **Ubuntu Server** using **Samba Active Directory**. The goal is to create a fully functional centralized authentication environment that enables management of users, groups, policies (GPOs), shared resources, and domain trusts within a simulated enterprise network.
 
-Este repositorio incluye documentación técnica detallada, configuraciones paso a paso, scripts de automatización y evidencias visuales del proceso completo de implementación.
+This repository includes detailed technical documentation, step-by-step configurations, automation scripts, and visual evidence of the complete implementation process.
 
 > [!NOTE]
-> Este contenido está dedicado al ámbito educativo y de formación en administración de sistemas.
+> This content is dedicated to the educational and training field in systems administration.
 
-## 🎯 Objetivos del Proyecto
+## 🎯 Project Objectives
 
-- ✅ **Instalación y configuración** de Ubuntu Server como Domain Controller
-- ✅ **Implementación de Samba AD DC** con DNS integrado
-- ✅ **Creación y gestión** de usuarios, grupos y Unidades Organizativas (OUs)
-- ✅ **Configuración de políticas de grupo** (GPOs) en entorno híbrido Linux/Windows
-- ✅ **Unión de clientes** Linux y Windows al dominio
-- ✅ **Implementación de recursos compartidos** con ACLs y permisos avanzados
-- ✅ **Configuración de confianzas de dominio** (Domain/Forest Trusts)
-- ✅ **Auditoría y seguridad** con registro de eventos
-- ✅ **Automatización de tareas** con Cron y scripts de backup
-- ✅ **Gestión de procesos y monitorización** del sistema
+- ✅ **Installation and configuration** of Ubuntu Server as Domain Controller
+- ✅ **Samba AD DC implementation** with integrated DNS
+- ✅ **Creation and management** of users, groups, and Organizational Units (OUs)
+- ✅ **Group Policy configuration** (GPOs) in hybrid Linux/Windows environment
+- ✅ **Client joining** Linux and Windows to the domain
+- ✅ **Shared resources implementation** with ACLs and advanced permissions
+- ✅ **Domain trust configuration** (Domain/Forest Trusts)
+- ✅ **Auditing and security** with event logging
+- ✅ **Task automation** with Cron and backup scripts
+- ✅ **Process management and system monitoring**
 
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Technologies Used
 
-| Tecnología | Versión | Propósito |
-|------------|---------|-----------|
-| Ubuntu Server | 24.04 LTS | Sistema operativo base |
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Ubuntu Server | 24.04 LTS | Base operating system |
 | Samba | 4.x | Active Directory Domain Services |
-| Kerberos | 5 | Sistema de autenticación |
-| Winbind | Latest | Integración de usuarios/grupos AD |
+| Kerberos | 5 | Authentication system |
+| Winbind | Latest | AD user/group integration |
 | SSSD | Latest | System Security Services Daemon |
-| CIFS/SMB | 3.x | Protocolo de compartición de archivos |
-| DNS (Samba Internal) | - | Resolución de nombres del dominio |
-| VirtualBox | 7.x | Plataforma de virtualización |
+| CIFS/SMB | 3.x | File sharing protocol |
+| DNS (Samba Internal) | - | Domain name resolution |
+| VirtualBox | 7.x | Virtualization platform |
 
-## 📂 Estructura del Repositorio
+## 📂 Repository Structure
 
 ```
 Domain-Controller-Active-Directory-with-Ubuntu-Server/
-├── README.md                          # Este archivo
-├── documentacion/                     # Documentación técnica detallada
-│   ├── 01-instalacion-base.md        # Instalación de Ubuntu Server
-│   ├── 02-configuracion-red.md       # Configuración de red estática
-│   ├── 03-samba-ad-dc.md             # Promoción a DC
-│   ├── 04-gestion-usuarios.md        # Usuarios, grupos y OUs
-│   ├── 05-union-clientes.md          # Unión de clientes al dominio
-│   ├── 06-gpos.md                    # Políticas de grupo
-│   ├── 07-recursos-compartidos.md    # File Server y permisos
-│   ├── 08-trusts.md                  # Confianzas de dominio
-│   ├── 09-auditoria.md               # Seguridad y logging
-│   └── 10-automatizacion.md          # Scripts y tareas programadas
-├── configuracion/                     # Archivos de configuración
-│   ├── smb.conf                      # Configuración de Samba
-│   ├── krb5.conf                     # Configuración de Kerberos
-│   ├── netplan/                      # Configuraciones de red
-│   ├── pam_mount.conf.xml            # Montaje automático de recursos
-│   └── scripts/                      # Scripts de automatización
-│       ├── backup_samba.sh           # Script de backup del AD
-│       └── user_creation.sh          # Script de creación masiva de usuarios
-├── evidencias/                        # Capturas de pantalla y pruebas
-│   ├── 01-instalacion/               # Evidencias de instalación
-│   ├── 02-configuracion/             # Evidencias de configuración
-│   ├── 03-usuarios-grupos/           # Gestión de usuarios y OUs
-│   ├── 04-clientes/                  # Unión de clientes
-│   ├── 05-gpos/                      # Políticas aplicadas
-│   ├── 06-recursos/                  # Recursos compartidos
-│   ├── 07-trusts/                    # Confianzas de dominio
-│   └── 08-auditoria/                 # Logs y auditoría
-└── LICENSE                            # Licencia del proyecto
+├── README.md                          # This file
+├── documentacion/                     # Detailed technical documentation
+│   ├── 01-instalacion-base.md        # Ubuntu Server installation
+│   ├── 02-configuracion-red.md       # Static network configuration
+│   ├── 03-samba-ad-dc.md             # DC promotion
+│   ├── 04-gestion-usuarios.md        # Users, groups and OUs
+│   ├── 05-union-clientes.md          # Client domain joining
+│   ├── 06-gpos.md                    # Group policies
+│   ├── 07-recursos-compartidos.md    # File Server and permissions
+│   ├── 08-trusts.md                  # Domain trusts
+│   ├── 09-auditoria.md               # Security and logging
+│   └── 10-automatizacion.md          # Scripts and scheduled tasks
+├── configuracion/                     # Configuration files
+│   ├── smb.conf                      # Samba configuration
+│   ├── krb5.conf                     # Kerberos configuration
+│   ├── netplan/                      # Network configurations
+│   ├── pam_mount.conf.xml            # Automatic resource mounting
+│   └── scripts/                      # Automation scripts
+│       ├── backup_samba.sh           # AD backup script
+│       └── user_creation.sh          # Mass user creation script
+├── evidencias/                        # Screenshots and tests
+│   ├── 01-instalacion/               # Installation evidence
+│   ├── 02-configuracion/             # Configuration evidence
+│   ├── 03-usuarios-grupos/           # Users and OUs management
+│   ├── 04-clientes/                  # Client joining
+│   ├── 05-gpos/                      # Applied policies
+│   ├── 06-recursos/                  # Shared resources
+│   ├── 07-trusts/                    # Domain trusts
+│   └── 08-auditoria/                 # Logs and auditing
+└── LICENSE                            # Project license
 ```
 
-## 🚀 Guía de Implementación Completa
+## 🚀 Complete Implementation Guide
 
-### 📋 Tabla de Contenidos
+### 📋 Table of Contents
 
-1. [Preparación del Entorno Virtual](#1-preparación-del-entorno-virtual)
-2. [Instalación de Ubuntu Server](#2-instalación-de-ubuntu-server)
-3. [Configuración de Red](#3-configuración-de-red)
-4. [Instalación de Samba y Dependencias](#4-instalación-de-samba-y-dependencias)
-5. [Promoción a Domain Controller](#5-promoción-a-domain-controller)
-6. [Gestión de Usuarios, Grupos y OUs](#6-gestión-de-usuarios-grupos-y-ous)
-7. [Unión de Clientes al Dominio](#7-unión-de-clientes-al-dominio)
-8. [Configuración de GPOs](#8-configuración-de-gpos)
-9. [Recursos Compartidos y Permisos](#9-recursos-compartidos-y-permisos)
-10. [Confianzas de Dominio](#10-confianzas-de-dominio)
-11. [Auditoría y Seguridad](#11-auditoría-y-seguridad)
-12. [Automatización y Tareas Programadas](#12-automatización-y-tareas-programadas)
-
----
-
-## 1. Preparación del Entorno Virtual
-
-### 🖥️ Especificaciones de la VM (Servidor DC01)
-
-### 🌐 Configuración de Red en VirtualBox
-
-La VM debe tener **dos adaptadores de red**:
-
-- **Adaptador 1 (Bridge/NAT)**: Para acceso a Internet y descarga de paquetes
-- **Adaptador 2 (Red Interna)**: Para el tráfico del dominio
-  - Nombre de la red interna: `intnet`
-  - IP estática: `172.30.20.32/25`
-
-![Configuración de red VirtualBox](/evidencias/01-instalacion/Instalacion%20Linux%20Vbox.png)
-
-> **📸 Ver más evidencias**: [/evidencias/01-instalacion/](/evidencias/01-instalacion/)
+1. [Virtual Environment Preparation](#1-virtual-environment-preparation)
+2. [Ubuntu Server Installation](#2-ubuntu-server-installation)
+3. [Network Configuration](#3-network-configuration)
+4. [Samba and Dependencies Installation](#4-samba-and-dependencies-installation)
+5. [Domain Controller Promotion](#5-domain-controller-promotion)
+6. [Users, Groups and OUs Management](#6-users-groups-and-ous-management)
+7. [Client Domain Joining](#7-client-domain-joining)
+8. [GPO Configuration](#8-gpo-configuration)
+9. [Shared Resources and Permissions](#9-shared-resources-and-permissions)
+10. [Domain Trusts](#10-domain-trusts)
+11. [Auditing and Security](#11-auditing-and-security)
+12. [Automation and Scheduled Tasks](#12-automation-and-scheduled-tasks)
 
 ---
 
-## 2. Instalación de Ubuntu Server
+## 1. Virtual Environment Preparation
 
-# Ver miembros de un grupo
-sudo samba-tool group listmembers Students
-1. **Seleccionar ISO**: Ubuntu Server 24.04 LTS
-2. **Configuración de almacenamiento**: Usar disco completo (20 GB)
-3. **Perfil de usuario**: Crear usuario administrador local
-4. **OpenSSH Server**: ✅ Instalar para administración remota
-5. **Snap packages**: ⬜ Desmarcar para instalación más rápida
-6. **Roles adicionales**: ⬜ No instalar ninguno
+### 🖥️ VM Specifications (DC01 Server)
 
-### ✅ Checkpoint Inicial
+### 🌐 VirtualBox Network Configuration
 
-Tras la instalación, el sistema debe:
-- ✅ Arrancar correctamente
-- ✅ Permitir login con el usuario creado
-- ✅ Tener conectividad de red básica
+The VM must have **two network adapters**:
 
+- **Adapter 1 (Bridge/NAT)**: For Internet access and package downloads
+- **Adapter 2 (Internal Network)**: For domain traffic
+  - Internal network name: `intnet`
+  - Static IP: `172.30.20.32/25`
+
+![VirtualBox network configuration](/evidencias/01-instalacion/Instalacion%20Linux%20Vbox.png)
+
+> **📸 See more evidence**: [/evidencias/01-instalacion/](/evidencias/01-instalacion/)
 
 ---
 
-## 3. Configuración de Red
+## 2. Ubuntu Server Installation
 
-### 🔧 Configuración IP Estática con Netplan
-Editar el archivo de configuración de red:
+1. **Select ISO**: Ubuntu Server 24.04 LTS
+2. **Storage configuration**: Use entire disk (20 GB)
+3. **User profile**: Create local administrator user
+4. **OpenSSH Server**: ✅ Install for remote administration
+5. **Snap packages**: ⬜ Uncheck for faster installation
+6. **Additional roles**: ⬜ Do not install any
+
+### ✅ Initial Checkpoint
+
+After installation, the system must:
+- ✅ Boot correctly
+- ✅ Allow login with created user
+- ✅ Have basic network connectivity
+
+---
+
+## 3. Network Configuration
+
+### 🔧 Static IP Configuration with Netplan
+
+Edit the network configuration file:
 
 ```bash
-sudo nano /etc/netplan/00-installer-config.yaml(o el archivo que tu sistema cree)
+sudo nano /etc/netplan/00-installer-config.yaml
 ```
 
-**Configuración recomendada**:
+**Recommended configuration**:
 
 ```yaml
 network:
@@ -164,40 +162,39 @@ network:
         - 192.168.2.45/24
       nameservers:
         addresses:
-         - 127.0.0.1      # DNS local (Samba)
+         - 127.0.0.1      # Local DNS (Samba)
 ```
 
-![Configuración de red VirtualBox](/evidencias/02-configuracion/netplan_serv.png)
+![VirtualBox network configuration](/evidencias/02-configuracion/netplan_serv.png)
 
-**Aplicar cambios**:
-samba-tool domain level show
+**Apply changes**:
 
 ```bash
 sudo netplan apply
 ```
 
-### 🚫 Deshabilitar IPv6
+### 🚫 Disable IPv6
 
-Samba AD DS funciona mejor con IPv4 únicamente:
+Samba AD DS works better with IPv4 only:
 
 ```bash
 echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-### 🏷️ Configurar Hostname
+### 🏷️ Configure Hostname
 
 ```bash
 sudo hostnamectl set-hostname ls03
 ```
 
-### 📝 Editar /etc/hosts
+### 📝 Edit /etc/hosts
 
 ```bash
 sudo nano /etc/hosts
 ```
 
-Contenido:
+Content:
 
 ```
 127.0.0.1       localhost
@@ -205,76 +202,76 @@ Contenido:
 192.168.1.2     ls03.lab03.local ls03
 ```
 
-
-### ✅ Verificación
+### ✅ Verification
 
 ```bash
-ip addr show                    # Ver configuración de red
-ping -c 4 8.8.8.8              # Probar conectividad Internet
-hostname --fqdn                 # Debe mostrar: ls03.lab03.local
+ip addr show                    # View network configuration
+ping -c 4 8.8.8.8              # Test Internet connectivity
+hostname --fqdn                 # Should display: ls03.lab03.local
 ```
 
-![Asegurate de los DNS](/evidencias/02-configuracion/hosts_serv.png)
+![Make sure of DNS](/evidencias/02-configuracion/hosts_serv.png)
 
 ---
 
-## 4. Instalación de Samba y Dependencias
+## 4. Samba and Dependencies Installation
 
-### 📦 Instalación de Paquetes
+### 📦 Package Installation
 
 ```bash
 sudo apt update
 sudo apt install samba krb5-user winbind smbclient dnsutils -y
 ```
 
-### 📚 Descripción de Paquetes
+### 📚 Package Description
 
-| Paquete | Función |
+| Package | Function |
 |---------|---------|
-| **samba** | Núcleo principal - Permite que Linux actúe como DC |
-| **krb5-user** | Cliente Kerberos - Sistema de autenticación de AD |
-| **winbind** | Integra usuarios y grupos del dominio en Linux |
-| **smbclient** | Cliente SMB para pruebas y diagnóstico |
-| **dnsutils** | Herramientas DNS (dig, nslookup) para validación |
+| **samba** | Main core - Allows Linux to act as DC |
+| **krb5-user** | Kerberos client - AD authentication system |
+| **winbind** | Integrates domain users and groups into Linux |
+| **smbclient** | SMB client for testing and diagnostics |
+| **dnsutils** | DNS tools (dig, nslookup) for validation |
 
-### ⚙️ Configuración Inicial de Kerberos
+### ⚙️ Initial Kerberos Configuration
 
-Durante la instalación, se solicitará:
+During installation, you will be asked for:
 
-- **Default realm**: `LAB03.LOCAL` (en MAYÚSCULAS)
+- **Default realm**: `LAB03.LOCAL` (in UPPERCASE)
 - **KDC**: `ls03.lab03.local`
 - **Admin server**: `ls03.lab03.local`
 
-![Configuración Kerberos](/evidencias/02-configuracion/krb.png)
+![Kerberos configuration](/evidencias/02-configuracion/krb.png)
 
-Si durante la instalación, hay algun parametro no correcto:
+If during installation there is an incorrect parameter:
 
 ```bash
 sudo dpkg-reconfigure krb5-config
 ```
-Restaurar valores por defecto (reset total)
+
+Restore default values (total reset):
 
 ```bash
 sudo apt purge krb5-user krb5-config -y
 sudo apt install krb5-user
 ```
 
-### 🔧 Preparación del DNS
+### 🔧 DNS Preparation
 
-Samba necesita controlar el puerto 53. Desactivar el resolver de Ubuntu:
+Samba needs to control port 53. Disable Ubuntu's resolver:
 
 ```bash
-# Detener systemd-resolved
+# Stop systemd-resolved
 sudo systemctl disable --now systemd-resolved
 
-# Eliminar el enlace simbólico
+# Remove symbolic link
 sudo unlink /etc/resolv.conf
 
-# Crear archivo DNS estático
+# Create static DNS file
 sudo nano /etc/resolv.conf
 ```
 
-Contenido:
+Content:
 
 ```
 nameserver 192.168.1.2
@@ -283,67 +280,66 @@ search lab03.local
 
 ---
 
-## 5. Promoción a Domain Controller
+## 5. Domain Controller Promotion
 
-### 🛑 Detener Servicios Conflictivos
+### 🛑 Stop Conflicting Services
 
 ```bash
 sudo systemctl stop smbd nmbd winbind
 sudo systemctl disable smbd nmbd winbind
 ```
 
-### 🎯 Backup de Configuración Original
+### 🎯 Backup Original Configuration
 
 ```bash
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.backup
 ```
 
-### 🚀 Provisionar el Dominio
+### 🚀 Provision the Domain
 
-Este comando crea el Active Directory:
+This command creates the Active Directory:
 
 ```bash
 sudo samba-tool domain provision --use-rfc2307 --interactive
 ```
 
-**Parámetros a introducir**:
+**Parameters to enter**:
 
-| Parámetro | Valor | Descripción |
+| Parameter | Value | Description |
 |-----------|-------|-------------|
-| **Realm** | `lab03.local` | Nombre del dominio Kerberos |
-| **Domain** | `lab03` | Nombre NetBIOS del dominio |
+| **Realm** | `lab03.local` | Kerberos domain name |
+| **Domain** | `lab03` | Domain NetBIOS name |
 | **Server Role** | `dc` | Domain Controller |
-| **DNS backend** | `SAMBA_INTERNAL` | DNS integrado de Samba |
-| **DNS forwarder** | `10.239.3.7` | DNS externo para resolución |
-| **Administrator password** | (elegir contraseña segura) | Mínimo 8 caracteres |
+| **DNS backend** | `SAMBA_INTERNAL` | Samba integrated DNS |
+| **DNS forwarder** | `10.239.3.7` | External DNS for resolution |
+| **Administrator password** | (choose secure password) | Minimum 8 characters |
 
+### ⚙️ Final Adjustments
 
-### ⚙️ Ajustes Finales
+#### 1. Configure Listening Interface
 
-#### 1. Configurar Interfaz de Escucha
-
-Editar `/etc/samba/smb.conf`:
+Edit `/etc/samba/smb.conf`:
 
 ```bash
 sudo nano /etc/samba/smb.conf
 ```
 
-Añadir en la sección `[global]`:
+Add in `[global]` section:
 
 ```ini
 [global]
-    # ... configuración existente ...
-    interfaces = lo enp0s3  # Tu interfaz de red interna
+    # ... existing configuration ...
+    interfaces = lo enp0s3  # Your internal network interface
     bind interfaces only = yes
 ```
 
-#### 2. Configurar Cliente Kerberos
+#### 2. Configure Kerberos Client
 
 ```bash
 sudo cp /var/lib/samba/private/krb5.conf /etc/krb5.conf
 ```
 
-#### 3. Arrancar el Servicio AD DC
+#### 3. Start AD DC Service
 
 ```bash
 sudo systemctl unmask samba-ad-dc
@@ -351,25 +347,25 @@ sudo systemctl enable samba-ad-dc
 sudo systemctl start samba-ad-dc
 ```
 
-### ✅ Verificación del Domain Controller
+### ✅ Domain Controller Verification
 
 ```bash
-# Ver nivel del dominio
+# View domain level
 sudo samba-tool domain level show
 
-# Verificar DNS (registros SRV)
+# Verify DNS (SRV records)
 host -t SRV _ldap._tcp.lab03.local
 host -t SRV _kerberos._tcp.lab03.local
 
-# Listar usuarios del dominio
+# List domain users
 sudo samba-tool user list
 
-# Probar autenticación Kerberos
+# Test Kerberos authentication
 kinit administrator
 klist
 ```
 
-**Resultado esperado**:
+**Expected result**:
 
 ```
 administrator@LAB03.LOCAL
@@ -377,90 +373,89 @@ administrator@LAB03.LOCAL
     01/15/26 10:00:00  01/15/26 20:00:00  krbtgt/LAB03.LOCAL@LAB03.LOCAL
 ```
 
-![Verificación del DC](/evidencias/02-configuracion/kinit.png)
+![DC verification](/evidencias/02-configuracion/kinit.png)
 
 ---
 
-## 6. Gestión de Usuarios, Grupos y OUs
+## 6. Users, Groups and OUs Management
 
-### 👤 Creación de Usuarios
+### 👤 User Creation
 
 ```bash
-# Crear usuarios del dominio
+# Create domain users
 sudo samba-tool user create alice "admin_21"
 sudo samba-tool user create bob "admin_21"
 sudo samba-tool user create charlie "admin_21"
 
-# Listar usuarios
+# List users
 sudo samba-tool user list
 ```
 
-### 👥 Creación de Grupos
+### 👥 Group Creation
 
 ```bash
-# Crear grupos de seguridad
+# Create security groups
 sudo samba-tool group add IT_Admins
 sudo samba-tool group add Students
 
-# Añadir usuarios a grupos
+# Add users to groups
 sudo samba-tool group addmembers Students bob,charlie
 sudo samba-tool group addmembers IT_Admins alice
 
-# Ver miembros de un grupo
+# View group members
 sudo samba-tool group listmembers Students
 ```
 
-### 🗂️ Creación de Unidades Organizativas (OUs)
+### 🗂️ Organizational Units (OUs) Creation
 
 ```bash
-# Crear estructura de OUs
+# Create OU structure
 sudo samba-tool ou create "OU=IT_Department,DC=lab03,DC=local"
 sudo samba-tool ou create "OU=HR_Department,DC=lab03,DC=local"
 sudo samba-tool ou create "OU=Students,DC=lab03,DC=local"
 
-# Mover usuarios a sus OUs
+# Move users to their OUs
 sudo samba-tool user move bob "OU=Students,DC=lab03,DC=local"
 sudo samba-tool user move charlie "OU=Students,DC=lab03,DC=local"
 sudo samba-tool user move alice "OU=IT_Department,DC=lab03,DC=local"
 ```
 
-### 🔍 Consultar Información de Usuarios
+### 🔍 Query User Information
 
 ```bash
-# Ver grupos de un usuario
+# View user's groups
 sudo samba-tool user getgroups bob
 
-# Ver información detallada
+# View detailed information
 sudo samba-tool user show bob
 ```
 
-![Gestión de usuarios y OUs](/evidencias/03-usuarios-grupos/mover_usu_OU.png)
+![Users and OUs management](/evidencias/03-usuarios-grupos/mover_usu_OU.png)
 
 ---
 
-## 7. Unión de Clientes al Dominio
+## 7. Client Domain Joining
 
-### 🖥️ Cliente Ubuntu Desktop
+### 🖥️ Ubuntu Desktop Client
 
-#### Especificaciones de la VM
+#### VM Specifications
 
-| Componente | Valor |
+| Component | Value |
 |------------|-------|
 | **Hostname** | lc03 |
-| **Sistema** | Ubuntu Desktop 24.04 |
+| **System** | Ubuntu Desktop 24.04 |
 | **RAM** | 2 GB |
-| **Red** | Red Interna (`intnet`) |
+| **Network** | Internal Network (`intnet`) |
 
+#### Network Configuration
 
-#### Configuración de Red
-
-**Editar el archivo de configuración de red**:
+**Edit network configuration file**:
 
 ```bash
-sudo nano /etc/netplan/00-installer-config.yaml(o el archivo que tu sistema cree)
+sudo nano /etc/netplan/00-installer-config.yaml
 ```
 
-**Configuración recomendada**:
+**Recommended configuration**:
 
 ```yaml
 network:
@@ -468,17 +463,16 @@ network:
   ethernets:
     enp0s3:  
       dhcp4: true
-    enp0s8:  # Adaptador de red interna
+    enp0s8:  # Internal network adapter
       dhcp4: false
       addresses:
         - 192.168.1.3/24
       nameservers:
         addresses:
           - 192.168.1.2
-
 ```
 
-#### 📦 Instalación de Paquetes
+#### 📦 Package Installation
 
 ```bash
 sudo apt update
@@ -486,16 +480,17 @@ sudo apt install realmd sssd sssd-tools samba-common krb5-user \
                  packagekit samba-common-bin adcli -y
 ```
 
-#### 🔧 Configuración de Red
+#### 🔧 Network Configuration
 
 **1. DNS (/etc/resolv.conf)**
 
 ```bash
 # sudo nano /etc/resolv.conf
-nameserver 192.168.1.2    # IP del DC - RED INTERNA
+nameserver 192.168.1.2    # DC IP - INTERNAL NETWORK
 search lab03.local
 ```
-![Archivo configurado](/evidencias/02-configuracion/resolv_cli.png)
+
+![Configured file](/evidencias/02-configuracion/resolv_cli.png)
 
 **2. Hosts (/etc/hosts)**
 
@@ -505,21 +500,21 @@ search lab03.local
 127.0.1.1       lc03
 192.168.1.2    ls03.lab03.local ls03
 ```
-![Archivo configurado](/evidencias/02-configuracion/hosts_cli.png)
 
-**3. Kerberos (krb5.conf) | No es necesario en este tipo de cliente**
+![Configured file](/evidencias/02-configuracion/hosts_cli.png)
 
-> ⚠️ **¿Cuándo editar `/etc/krb5.conf` manualmente en el cliente?**
+**3. Kerberos (krb5.conf) | Not necessary on this type of client**
+
+> ⚠️ **When to manually edit `/etc/krb5.conf` on the client?**
 >
-> En un cliente unido al dominio con `realm join` **no es necesario tocarlo**. Solo hace falta editarlo en estos casos:
+> On a client joined to the domain with `realm join` **it's not necessary**. Only needed in these cases:
 >
-> - El cliente necesita acceder a recursos del **dominio remoto** (ej: cliente de `lab03.local` monta carpetas de `lab04.local`)
-> - `realm join` no generó el `krb5.conf` correctamente
-> - El DNS no resuelve los registros SRV y hay que **hardcodear el KDC**
-> - El cliente usa `kinit` manualmente contra dominios externos
+> - Client needs to access **remote domain** resources (e.g., `lab03.local` client mounts folders from `lab04.local`)
+> - `realm join` didn't generate `krb5.conf` correctly
+> - DNS doesn't resolve SRV records and you need to **hardcode the KDC**
+> - Client uses `kinit` manually against external domains
 
 ```ini
-
 # sudo nano /etc/krb5.conf
 
 [libdefaults]
@@ -538,148 +533,150 @@ search lab03.local
     lab03.local = LAB03.LOCAL
 ```
 
-#### 🏠 Creación Automática de Directorios Home
+#### 🏠 Automatic Home Directory Creation
 
 ```bash
 sudo pam-auth-update --enable mkhomedir
 ```
 
-#### 🔗 Unión al Dominio
+#### 🔗 Domain Joining
 
 ```bash
-# Descubrir el dominio
+# Discover domain
 realm discover lab03.local
 
-# Unir al dominio
+# Join domain
 sudo realm join lab03.local -U Administrator --verbose
 ```
 
-![Unión de cliente Ubuntu](/evidencias/04-clientes/realm_join.png)
+![Ubuntu client joining](/evidencias/04-clientes/realm_join.png)
 
-#### ✅ Verificación
+#### ✅ Verification
 
 ```bash
-# Verificar estado del dominio
+# Verify domain status
 realm list
 
-# Verificar usuario del dominio
+# Verify domain user
 id bob@lab03.local
 
-# Iniciar sesión como usuario del dominio
+# Login as domain user
 su - bob@lab03.local
 ```
 
-#### 🖱️ Login Gráfico (GDM)
+#### 🖱️ Graphical Login (GDM)
 
-##### 🏠 Creación Automática de Directorios Home
+##### 🏠 Automatic Home Directory Creation
+
 ```bash
 sudo pam-auth-update --enable mkhomedir
 ```
 
-> 🔄 Cerrar sesión y volver a iniciar sesión gráficamente con un usuario del dominio.
+> 🔄 Log out and log back in graphically with a domain user.
 
-##### ⚠️ Si el login gráfico no permite acceso:
+##### ⚠️ If graphical login doesn't allow access:
+
 ```bash
 sudo nano /etc/pam.d/gdm-password
 ```
 
-Añadir al final:
+Add at the end:
 
 ```
 session  required  pam_mkhomedir.so skel=/etc/skel umask=0077
 ```
 
-![Login gráfico con usuario del dominio](/evidencias/04-clientes/ubuntu-graphical-login.png)
+![Graphical login with domain user](/evidencias/04-clientes/ubuntu-graphical-login.png)
 
-### 💻 Cliente Windows (if needed)
+### 💻 Windows Client (if needed)
 
-#### 📋 Requisitos Previos
+#### 📋 Prerequisites
 
-1. Windows 10/11 Professional o Enterprise
-2. Conectado a la misma red interna que el DC
-3. DNS apuntando al DC: `172.30.20.32`
+1. Windows 10/11 Professional or Enterprise
+2. Connected to same internal network as DC
+3. DNS pointing to DC: `172.30.20.32`
 
-#### 🔗 Unión al Dominio
+#### 🔗 Domain Joining
 
-1. **Panel de Control** → **Sistema** → **Cambiar configuración**
-2. **Cambiar** → **Dominio**: `lab03.local`
-3. Introducir credenciales de **Administrator**
-4. Reiniciar el equipo
+1. **Control Panel** → **System** → **Change settings**
+2. **Change** → **Domain**: `lab03.local`
+3. Enter **Administrator** credentials
+4. Restart computer
 
-#### 🛠️ Instalación de RSAT (Remote Server Administration Tools)
+#### 🛠️ RSAT Installation (Remote Server Administration Tools)
 
-Para gestionar GPOs desde Windows:
+To manage GPOs from Windows:
 
-1. **Configuración** → **Aplicaciones** → **Características opcionales**
-2. **Agregar una característica**
-3. Buscar e instalar: **RSAT: Group Policy Management Tools**
+1. **Settings** → **Apps** → **Optional features**
+2. **Add a feature**
+3. Search and install: **RSAT: Group Policy Management Tools**
 
 ---
 
-## 8. Configuración de GPOs desde Ubuntu Server
+## 8. GPO Configuration from Ubuntu Server
 
-### 🎯 Creación de GPO
+### 🎯 GPO Creation
 
 ```bash
-# Crear nueva GPO
+# Create new GPO
 sudo samba-tool gpo create "Student_Policy" -U administrator
 
-# Listar GPOs y obtener GUID
+# List GPOs and get GUID
 sudo samba-tool gpo listall
 
-# Vincular GPO a una OU
+# Link GPO to an OU
 sudo samba-tool gpo setlink "OU=Students,DC=lab03,DC=local" {GUID} -U administrator
 
-# Verificar vínculo
+# Verify link
 sudo samba-tool gpo getlink "OU=Students,DC=lab03,DC=local" -U administrator
 ```
 
-### 🔧 Solución de Permisos (ERROR HRESULT E_ACCESSDENIED)
+### 🔧 Permission Fix (ERROR HRESULT E_ACCESSDENIED)
 
-Si aparece error al editar desde Windows:
+If error appears when editing from Windows:
 
 ```bash
-# Resetear ACLs en SYSVOL
+# Reset ACLs on SYSVOL
 sudo samba-tool ntacl sysvolreset
 ```
 
-### 🖥️ Edición de GPO desde Windows (RSAT)
+### 🖥️ GPO Editing from Windows (RSAT)
 
-1. Abrir **gpmc.msc** (Group Policy Management Console)
-2. Navegar a **Forest: lab03.local** → **Domains** → **lab03.local** → **Students**
-3. Click derecho en **Student_Policy** → **Edit**
+1. Open **gpmc.msc** (Group Policy Management Console)
+2. Navigate to **Forest: lab03.local** → **Domains** → **lab03.local** → **Students**
+3. Right-click on **Student_Policy** → **Edit**
 
-#### Ejemplo: Bloquear acceso al Panel de Control
+#### Example: Block Control Panel Access
 
-**Ruta**: User Configuration → Policies → Administrative Templates → Control Panel
+**Path**: User Configuration → Policies → Administrative Templates → Control Panel
 
-**Configuración**: "Prohibit access to Control Panel and PC settings" → **Enabled**
+**Setting**: "Prohibit access to Control Panel and PC settings" → **Enabled**
 
-### 🐧 Aplicación en Cliente Linux
+### 🐧 Application on Linux Client
 
-**Nota importante**: Las políticas de registro de Windows (Registry.pol) **NO se aplican** en clientes Linux (GNOME/SSSD). Sin embargo, las políticas de **seguridad** y **contraseñas** sí se aplican.
+**Important note**: Windows registry policies (Registry.pol) **DO NOT apply** on Linux clients (GNOME/SSSD). However, **security** and **password** policies DO apply.
 
-### 💻 Verificación en Cliente Windows
+### 💻 Verification on Windows Client
 
 ```powershell
-# Actualizar políticas
+# Update policies
 gpupdate /force
 
-# Ver políticas aplicadas
+# View applied policies
 gpresult /r
 ```
 
-Intentar abrir Panel de Control → Debería aparecer mensaje de error: "Esta operación ha sido cancelada..."
+Try to open Control Panel → Error message should appear: "This operation has been cancelled..."
 
-### 🔐 Políticas de Contraseñas y Seguridad
+### 🔐 Password and Security Policies
 
-Estas políticas SÍ afectan a todos los clientes (Windows y Linux):
+These policies DO affect all clients (Windows and Linux):
 
 ```bash
-# Ver política actual
+# View current policy
 samba-tool domain passwordsettings show
 
-# Configurar política de contraseñas
+# Configure password policy
 sudo samba-tool domain passwordsettings set --min-pwd-length=8
 sudo samba-tool domain passwordsettings set --account-lockout-threshold=3
 sudo samba-tool domain passwordsettings set --account-lockout-duration=5
@@ -687,77 +684,77 @@ sudo samba-tool domain passwordsettings set --account-lockout-duration=5
 
 ---
 
-## 9. Recursos Compartidos y Permisos
+## 9. Shared Resources and Permissions
 
-### 💾 Añadir Disco Dedicado para Almacenamiento
+### 💾 Add Dedicated Disk for Storage
 
-#### En VirtualBox (VM apagada):
+#### On VirtualBox (VM powered off):
 
-1. **Crear disco virtual**:
+1. **Create virtual disk**:
    ```
-   VirtualBox → Seleccionar VM "ls03" → Settings → Storage
-   Controller: SATA → Click en icono "+" → Create new disk
+   VirtualBox → Select VM "ls03" → Settings → Storage
+   Controller: SATA → Click "+" icon → Create new disk
    ```
 
-2. **Configuración**:
-   - Tipo: VDI (VirtualBox Disk Image)
+2. **Configuration**:
+   - Type: VDI (VirtualBox Disk Image)
    - Storage: Dynamically allocated
-   - Tamaño: **15 GB**
-   - Nombre: `Linux Server AD_1.vdi`
+   - Size: **15 GB**
+   - Name: `Linux Server AD_1.vdi`
 
-#### En Ubuntu Server (arrancar VM):
+#### On Ubuntu Server (start VM):
 
-3. **Identificar el nuevo disco**:
+3. **Identify new disk**:
    ```bash
    lsblk
    ```
    
-   Salida esperada:
+   Expected output:
    ```
-   sdb      8:16   0   15G  0 disk     ← NUEVO DISCO
+   sdb      8:16   0   15G  0 disk     ← NEW DISK
    ```
 
-4. **Particionar**:
+4. **Partition**:
    ```bash
    sudo fdisk /dev/sdb
    ```
    
-   Comandos: `n` → `p` → `1` → `[Enter]` → `[Enter]` → `w`
+   Commands: `n` → `p` → `1` → `[Enter]` → `[Enter]` → `w`
 
-5. **Formatear**:
+5. **Format**:
    ```bash
    sudo mkfs.ext4 /dev/sdb1
    ```
 
-6. **Crear punto de montaje**:
+6. **Create mount point**:
    ```bash
    sudo mkdir -p /srv/samba
    ```
 
-7. **Configurar montaje automático** (`/etc/fstab`):
+7. **Configure automatic mounting** (`/etc/fstab`):
    ```bash
-   # Obtener UUID
+   # Get UUID
    sudo blkid /dev/sdb1
    
-   # Editar fstab
+   # Edit fstab
    sudo nano /etc/fstab
    ```
    
-   Añadir:
+   Add:
    ```
-   # Disco dedicado para recursos compartidos Samba
+   # Dedicated disk for Samba shared resources
    UUID=a1b2c3d4-e5f6-7890-abcd-ef1234567890  /srv/samba  ext4  defaults  0  2
    ```
    
-   Verificar:
+   Verify:
    ```bash
    sudo mount -a
    df -h | grep samba
    ```
 
-### 📁 Preparación del Servidor
+### 📁 Server Preparation
 
-#### 1. Crear Estructura de Directorios
+#### 1. Create Directory Structure
 
 ```bash
 sudo mkdir -p /srv/samba/StudentDocs
@@ -765,10 +762,11 @@ sudo mkdir -p /srv/samba/HRDocs
 sudo mkdir -p /srv/samba/ITDocs
 sudo mkdir -p /srv/samba/Public
 ```
-#### 2. Configurar Permisos Base
+
+#### 2. Configure Base Permissions
 
 ```bash
-# Asignar grupo propietario y permisos
+# Assign group ownership and permissions
 sudo chown :Students /srv/samba/StudentDocs
 sudo chmod 3770 /srv/samba/StudentDocs
 
@@ -778,94 +776,105 @@ sudo chmod 3770 /srv/samba/ITDocs
 sudo chown :"Domain Users" /srv/samba/Public
 sudo chmod 3777 /srv/samba/Public
 ```
-## 🔧 Solución de Problemas: Error "Domain Users Group"
 
-### ❌ Síntoma del Error
+## 🔧 Troubleshooting: "Domain Users Group" Error
 
-Si al intentar configurar permisos aparece este error:
+### ❌ Error Symptom
+
+If this error appears when trying to configure permissions:
 
 ![Error Domain Users Group](/evidencias/06-recursos/error_domain_users_group.png)
 
-### 🔍 Causa del Problema
+### 🔍 Problem Cause
 
-**NSS (Name Service Switch) no puede resolver grupos de AD** porque las librerías Winbind no están instaladas o configuradas correctamente.
+**NSS (Name Service Switch) cannot resolve AD groups** because Winbind libraries are not installed or properly configured.
 
-> **⚠️ Importante**: Sin estas librerías, Linux es "ciego" a los usuarios y grupos de Active Directory, aunque Samba esté funcionando. El servidor Samba puede autenticar usuarios, pero el sistema operativo Linux no los reconoce para operaciones de filesystem.
+> **⚠️ Important**: Without these libraries, Linux is "blind" to Active Directory users and groups, even though Samba is running. The Samba server can authenticate users, but the Linux operating system doesn't recognize them for filesystem operations.
 
-### ✅ Solución
+### ✅ Solution
 
-#### 1. Instalar Librerías Winbind
+#### 1. Install Winbind Libraries
+
 ```bash
 sudo apt-get install libnss-winbind libpam-winbind
 sudo ldconfig
 ```
 
-**Explicación de los paquetes**:
-- `libnss-winbind`: Permite a Linux resolver usuarios/grupos de AD mediante NSS
-- `libpam-winbind`: Permite autenticación PAM con credenciales de AD
-- `ldconfig`: Actualiza el caché de librerías compartidas
+**Package explanation**:
+- `libnss-winbind`: Allows Linux to resolve AD users/groups via NSS
+- `libpam-winbind`: Enables PAM authentication with AD credentials
+- `ldconfig`: Updates shared library cache
 
-#### 2. Configurar Winbind en Samba
+#### 2. Configure Winbind in Samba
 
-Editar `/etc/samba/smb.conf` en la sección `[global]`:
+Edit `/etc/samba/smb.conf` in `[global]` section:
+
 ```bash
 sudo nano /etc/samba/smb.conf
 ```
 
-Añadir o verificar estas líneas:
+Add or verify these lines:
+
 ```ini
 [global]
-    # ... configuración existente ...
+    # ... existing configuration ...
     
-    # Configuración de Winbind
+    # Winbind configuration
     winbind use default domain = yes
     template shell = /bin/bash
     template homedir = /home/%U
 ```
 
-**Explicación de los parámetros**:
-- `winbind use default domain = yes`: Permite usar solo el nombre de usuario sin el dominio
-- `template shell = /bin/bash`: Shell por defecto para usuarios de AD
-- `template homedir = /home/%U`: Directorio home automático basado en username
+**Parameter explanation**:
+- `winbind use default domain = yes`: Allows using username only without domain
+- `template shell = /bin/bash`: Default shell for AD users
+- `template homedir = /home/%U`: Automatic home directory based on username
 
-#### 3. Reiniciar Servicios
+#### 3. Restart Services
+
 ```bash
 sudo systemctl restart samba-ad-dc
 ```
-⚠️Si no funciona ⚠️
-> Verifica cómo está configurado el NSS
+
+⚠️ If it doesn't work ⚠️
+
+> Verify NSS configuration
+
 ```bash
 cat /etc/nsswitch.conf | grep -E "passwd|group"
 ```
 
-> Debe tener `winbind` en la línea de group:
+> Must have `winbind` in group line:
+
 ```bash
 passwd:         files systemd winbind
 group:          files systemd winbind
 ```
 
-#### 4. Verificar Resolución de Grupos
+#### 4. Verify Group Resolution
+
 ```bash
-# Verificar que Linux puede ver el grupo Domain Users
+# Verify Linux can see Domain Users group
 getent group "Domain Users"
 ```
+
 ---
 
-**Explicación de permisos (3770)**:
-- **3**: SetGID + Sticky Bit (hereda grupo + protege borrado)
-- **7**: Propietario (rwx)
-- **7**: Grupo (rwx)
-- **0**: Otros (sin acceso)
+**Permission explanation (3770)**:
+- **3**: SetGID + Sticky Bit (inherits group + protects deletion)
+- **7**: Owner (rwx)
+- **7**: Group (rwx)
+- **0**: Others (no access)
 
-### 📝 Configuración de Recursos Compartidos
+### 📝 Shared Resources Configuration
 
-Editar `/etc/samba/smb.conf`:
+Edit `/etc/samba/smb.conf`:
 
 ```bash
 sudo nano /etc/samba/smb.conf
 ```
 
-Añadir al final:
+Add at the end:
 
 ```ini
 [StudentDocs]
@@ -877,7 +886,7 @@ Añadir al final:
     force group = Students
     create mask = 0660
     directory mask = 0770
-    # Auditoría
+    # Auditing
     full_audit:prefix = %u|%I|%m|%S
     full_audit:success = mkdirat renameat unlinkat pwrite
     full_audit:failure = connect
@@ -901,37 +910,37 @@ Añadir al final:
     guest ok = no
 ```
 
-**Reiniciar Samba**:
+**Restart Samba**:
 
 ```bash
 sudo smbcontrol all reload-config
 ```
 
-### 🪟 Gestión de ACLs desde Windows
+### 🪟 ACL Management from Windows
 
-1. Desde el cliente Windows, abrir **Explorador de archivos**
-2. Conectar a `\\lab03.local` o `(IP-SERVIDOR)`
-3. Click derecho en carpeta → **Propiedades** → **Seguridad**
-4. **Editar** → Añadir grupos y configurar permisos
+1. From Windows client, open **File Explorer**
+2. Connect to `\\lab03.local` or `(SERVER-IP)`
+3. Right-click on folder → **Properties** → **Security**
+4. **Edit** → Add groups and configure permissions
 
-**Ejemplo**:
-- **Students**: Modificar (Read, Write, Delete)
-- **IT_Admins**: Control Total
-- **Finance** (si existe): **Denegar** todo
+**Example**:
+- **Students**: Modify (Read, Write, Delete)
+- **IT_Admins**: Full Control
+- **Finance** (if exists): **Deny** all
 
-![Gestión de permisos en Windows](/evidencias/06-recursos/windows-acl-management.png)
+![Permission management in Windows](/evidencias/06-recursos/windows-acl-management.png)
 
-### 🐧 Montaje Automático en Cliente Linux
+### 🐧 Automatic Mounting on Linux Client
 
-#### 📦 Instalación
+#### 📦 Installation
 
 ```bash
 sudo apt install libpam-mount cifs-utils
 ```
 
-#### ⚙️ Configuración
+#### ⚙️ Configuration
 
-Editar `/etc/security/pam_mount.conf.xml`:
+Edit `/etc/security/pam_mount.conf.xml`:
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -939,7 +948,7 @@ Editar `/etc/security/pam_mount.conf.xml`:
 <pam_mount>
     <debug enable="1" />
     
-    <!-- Montaje para Students -->
+    <!-- Mount for Students -->
     <volume user="*" sgrp="students@lab03.local" 
             fstype="cifs" 
             server="lab03.local" 
@@ -947,7 +956,7 @@ Editar `/etc/security/pam_mount.conf.xml`:
             mountpoint="~/StudentDocs" 
             options="sec=ntlmssp,cruid=%(USERUID),uid=%(USERUID),gid=%(USERGID),file_mode=0700,dir_mode=0700" />
     
-    <!-- Montaje para IT_Admins -->
+    <!-- Mount for IT_Admins -->
     <volume user="*" sgrp="it_admins@lab03.local" 
             fstype="cifs" 
             server="lab03.local" 
@@ -955,7 +964,7 @@ Editar `/etc/security/pam_mount.conf.xml`:
             mountpoint="~/ITDocs" 
             options="sec=ntlmssp,cruid=%(USERUID),uid=%(USERUID),gid=%(USERGID),file_mode=0700,dir_mode=0700" />
     
-    <!-- Montaje para todos los usuarios del dominio -->
+    <!-- Mount for all domain users -->
     <volume user="*" sgrp="domain users@lab03.local" 
             fstype="cifs" 
             server="lab03.local" 
@@ -970,83 +979,83 @@ Editar `/etc/security/pam_mount.conf.xml`:
 </pam_mount>
 ```
 
-#### ✅ Verificación
+#### ✅ Verification
 
-Al iniciar sesión como `bob@lab03.local`, se debe montar automáticamente `~/StudentDocs`.
+When logging in as `bob@lab03.local`, `~/StudentDocs` should automatically mount.
 
 ```bash
-# Ver montajes activos
+# View active mounts
 mount | grep cifs
 
-# Listar archivos
+# List files
 ls -la ~/StudentDocs
 ```
 
-### 📊 Verificación del Sistema de Almacenamiento
+### 📊 Storage System Verification
 
 ```bash
-# Ver uso del disco de datos
+# View data disk usage
 df -h /srv/samba
 
-# Ver estructura completa
+# View complete structure
 tree -L 2 /srv/samba
 
-# Salida esperada:
+# Expected output:
 # /srv/samba
 # ├── StudentDocs
 # ├── ITDocs
 # ├── HRDocs
 # └── Public
 
-# Verificar permisos
+# Verify permissions
 ls -la /srv/samba
 
-# Debe mostrar los grupos correctos y permisos 3770
+# Should show correct groups and 3770 permissions
 ```
 
 ---
 
-### 🎯 Ventajas del Disco Dedicado
+### 🎯 Dedicated Disk Advantages
 
-| Ventaja | Descripción |
+| Advantage | Description |
 |---------|-------------|
-| **Separación de Datos** | Sistema operativo y datos en discos diferentes |
-| **Escalabilidad** | Fácil aumentar capacidad o añadir más discos |
-| **Backup Selectivo** | Respaldar solo los datos sin el sistema |
-| **Rendimiento** | Reduce la carga de I/O en el disco del sistema |
-| **Producción Real** | Configuración profesional usada en entornos empresariales |
+| **Data Separation** | Operating system and data on different disks |
+| **Scalability** | Easy to increase capacity or add more disks |
+| **Selective Backup** | Back up only data without system |
+| **Performance** | Reduces I/O load on system disk |
+| **Production Reality** | Professional configuration used in enterprise environments |
 
 ---
 
-![Montaje automático en Linux](/evidencias/06-recursos/linux-auto-mount.png)
+![Automatic mounting on Linux](/evidencias/06-recursos/linux-auto-mount.png)
 
 ---
 
-## 10. Confianzas de Dominio
+## 10. Domain Trusts
 
-### 🌳 Escenario: Crear un Segundo Bosque
+### 🌳 Scenario: Create Second Forest
 
-Vamos a crear un segundo dominio `lab03trust.local` y establecer una confianza de tipo **Forest Trust**.
+We'll create a second domain `lab03trust.local` and establish a **Forest Trust** type trust.
 
-### 🖥️ Preparación del Segundo Servidor
+### 🖥️ Second Server Preparation
 
-#### Especificaciones
+#### Specifications
 
-| Parámetro | Valor |
+| Parameter | Value |
 |-----------|-------|
 | **Hostname** | ls03trust |
-| **Dominio** | lab03trust.local |
+| **Domain** | lab03trust.local |
 | **IP** | 192.168.2.3 |
 | **RAM** | 4 GB |
-| **CPU** | 2 núcleos |
+| **CPU** | 2 cores |
 
-#### 🔧 Configuración Inicial
+#### 🔧 Initial Configuration
 
 ```bash
-# Renombrar servidor
+# Rename server
 sudo hostnamectl set-hostname ls03trust
 
-# Configurar IP estática (Netplan)
+# Configure static IP (Netplan)
 sudo nano /etc/netplan/00-installer-config.yaml
 ```
 
@@ -1065,10 +1074,10 @@ network:
 ```
 
 ```bash
-# Aplicar cambios
+# Apply changes
 sudo netplan apply
 
-# Configurar /etc/hosts
+# Configure /etc/hosts
 sudo nano /etc/hosts
 ```
 
@@ -1079,45 +1088,45 @@ sudo nano /etc/hosts
 192.168.2.2     ls03.lab03.local ls03
 ```
 
-#### ⏰ Sincronización de Hora
+#### ⏰ Time Synchronization
 
 ```bash
-# Verificar zona horaria
+# Verify timezone
 timedatectl
 
-# Configurar zona horaria
+# Configure timezone
 sudo timedatectl set-timezone Europe/Madrid
 
-# Activar NTP
+# Enable NTP
 sudo timedatectl set-ntp true
 ```
 
-### 📦 Instalación y Promoción
+### 📦 Installation and Promotion
 
 ```bash
-# Instalar paquetes
+# Install packages
 sudo apt update
 sudo apt install acl attr samba samba-dsdb-modules samba-vfs-modules \
                  smbclient winbind libpam-winbind libnss-winbind \
                  krb5-config krb5-user dnsutils -y
 ```
 
-**Configuración Kerberos**:
+**Kerberos configuration**:
 - **Realm**: `LAB03TRUST.LOCAL`
 - **KDC**: `ls03trust.lab03trust.local`
 - **Admin server**: `ls03trust.lab03trust.local`
 
-#### 🚀 Provisión del Segundo Dominio
+#### 🚀 Second Domain Provision
 
 ```bash
-# Backup de configuración
+# Backup configuration
 sudo rm /etc/samba/smb.conf
 
-# Provisionar
+# Provision
 sudo samba-tool domain provision --use-rfc2307 --interactive
 ```
 
-**Parámetros**:
+**Parameters**:
 - **Realm**: `lab03trust.local`
 - **Domain**: `lab03trust`
 - **Server Role**: `dc`
@@ -1125,10 +1134,10 @@ sudo samba-tool domain provision --use-rfc2307 --interactive
 - **DNS forwarder**: `10.239.3.7`
 
 ```bash
-# Configurar Kerberos
+# Configure Kerberos
 sudo cp /var/lib/samba/private/krb5.conf /etc/krb5.conf
 
-# Arrancar servicio
+# Start service
 sudo systemctl stop smbd nmbd winbind
 sudo systemctl disable smbd nmbd winbind
 sudo systemctl unmask samba-ad-dc
@@ -1136,200 +1145,201 @@ sudo systemctl enable samba-ad-dc
 sudo systemctl start samba-ad-dc
 ```
 
-### 🌐 Configuración DNS para Trusts
+### 🌐 DNS Configuration for Trusts
 
-#### Opción 1: Configuracion Manual
+#### Option 1: Manual Configuration
 
-En cada DC, el `resolv.conf` debe apuntar a sí mismo:**
+On each DC, `resolv.conf` must point to itself:
+
 ```bash
 sudo systemctl disable systemd-resolved
 sudo systemctl stop systemd-resolved
 sudo rm /etc/resolv.conf
 ```
+
 ```bash
-# En dc01 (lab03.local)
+# On dc01 (lab03.local)
 echo "nameserver 192.168.2.30" > /etc/resolv.conf
 echo "search lab03.local" >> /etc/resolv.conf
 
-# En dc02 (lab04.local)
+# On dc02 (lab04.local)
 echo "nameserver 192.168.2.40" > /etc/resolv.conf
 echo "search lab04.local" >> /etc/resolv.conf
 ```
+
 ```bash
 sudo systemctl restart samba-ad-dc
 ```
 
-**Configurar forwarder en cadena en `smb.conf`:**
+**Configure chain forwarder in `smb.conf`:**
 
 ```ini
-# dc01/smb.conf → reenvía a dc02
+# dc01/smb.conf → forwards to dc02
 dns forwarder = 192.168.2.40
 
-# dc02/smb.conf → reenvía a internet
+# dc02/smb.conf → forwards to internet
 dns forwarder = 192.168.2.30
 ```
 
-> De esta forma dc01 resuelve `lab04.local` a través de dc02, y dc02 resuelve internet a través de Google DNS.
+> This way dc01 resolves `lab04.local` through dc02, and dc02 resolves internet through Google DNS.
 
-**Añadir registros en `/etc/hosts` de cada DC:**
+**Add records in each DC's `/etc/hosts`:**
 
 ```bash
-# En dc01
+# On dc01
 echo "192.168.2.40    dc02.lab04.local    lab04.local" >> /etc/hosts
 
-# En dc02
+# On dc02
 echo "192.168.2.30    dc01.lab03.local    lab03.local" >> /etc/hosts
 ```
 
+#### Option 2: Conditional Forwarders
 
-#### Opción 2: Reenviadores Condicionales 
-
-**En el servidor principal (ls03 - 192.168.2.2)**:
+**On primary server (ls03 - 192.168.2.2)**:
 
 ```bash
-# Crear zona de reenvío
+# Create forward zone
 sudo samba-tool dns zonecreate 192.168.2.2 lab03trust.local -U Administrator
 
-# Añadir NS del segundo dominio
+# Add NS for second domain
 sudo samba-tool dns add 192.168.2.2 lab03trust.local @ NS ls03trust.lab03trust.local -U Administrator
 
-# Añadir registro A
+# Add A record
 sudo samba-tool dns add 192.168.2.2 lab03trust.local ls03trust A 192.168.2.3 -U Administrator
 
-# Verificar
+# Verify
 sudo samba-tool dns query 192.168.2.2 lab03trust.local @ ALL -U Administrator
 nslookup ls03trust.lab03trust.local
 ```
 
-**En el servidor secundario (ls03trust - 192.168.2.3)**:
+**On secondary server (ls03trust - 192.168.2.3)**:
 
 ```bash
-# Crear zona de reenvío
+# Create forward zone
 sudo samba-tool dns zonecreate 192.168.2.3 lab03.local -U Administrator
 
-# Añadir NS del dominio principal
+# Add NS for primary domain
 sudo samba-tool dns add 192.168.2.3 lab03.local @ NS ls03.lab03.local -U Administrator
 
-# Añadir registro A
+# Add A record
 sudo samba-tool dns add 192.168.2.3 lab03.local ls03 A 192.168.2.2 -U Administrator
 
-# Verificar
+# Verify
 sudo samba-tool dns query 192.168.2.3 lab03.local @ ALL -U Administrator
 nslookup ls03.lab03.local
 ```
 
+### 🤝 Trust Creation
 
-### 🤝 Creación de la Confianza
-
-**Desde el servidor principal (ls03)**:
+**From primary server (ls03)**:
 
 ```bash
 sudo samba-tool domain trust create lab03trust.local \
     -U Administrator@LAB03TRUST.LOCAL --type=forest
 ```
 
-O alternativamente, desde el servidor secundario:
+Or alternatively, from secondary server:
 
 ```bash
 sudo samba-tool domain trust create lab03.local \
     -U Administrator@LAB03.LOCAL --type=forest
 ```
 
-### ✅ Verificación de la Confianza
+### ✅ Trust Verification
 
 ```bash
-# Listar confianzas
+# List trusts
 sudo samba-tool domain trust list
 
-# Validar confianza
-sudo samba-tool domain trust validate lab04.local -U Administrator@LAB04.LOCAL (Desde LAB03.LOCAL)
-``` 
+# Validate trust
+sudo samba-tool domain trust validate lab04.local -U Administrator@LAB04.LOCAL
+```
 
-### 🔍 Prueba Cross-Domain
+### 🔍 Cross-Domain Test
 
-Desde el dominio `lab03.local`, acceder a recursos del dominio `lab03trust.local`:
+From domain `lab03.local`, access resources from domain `lab03trust.local`:
 
 ```bash
-# Listar recursos del otro dominio
+# List resources from other domain
 smbclient //ls03trust.lab03trust.local/StudentDocs \
     -U bob@lab03.local -W LAB03
 ```
 
-![Acceso cross-domain](/evidencias/07-trusts/cross-domain-access.png)
+![Cross-domain access](/evidencias/07-trusts/cross-domain-access.png)
 
 ---
 
-## 11. Auditoría y Seguridad
+## 11. Auditing and Security
 
-### 📊 Configuración de Auditoría con Full Audit
+### 📊 Full Audit Configuration
 
-#### 1. Configurar rsyslog
+#### 1. Configure rsyslog
 
-Crear archivo de configuración:
+Create configuration file:
 
 ```bash
 sudo nano /etc/rsyslog.d/samba-audit.conf
 ```
 
-Contenido:
+Content:
 
 ```
-# Desviar logs de auditoría de Samba a archivo dedicado
+# Redirect Samba audit logs to dedicated file
 local7.notice   /var/log/samba_audit.log
 & stop
 ```
 
-#### 2. Crear y Configurar el Archivo de Log
+#### 2. Create and Configure Log File
 
 ```bash
-# Crear archivo
+# Create file
 sudo touch /var/log/samba_audit.log
 
-# Establecer permisos
+# Set permissions
 sudo chown syslog:adm /var/log/samba_audit.log
 sudo chmod 640 /var/log/samba_audit.log
 ```
 
-#### 3. Reiniciar Servicios
+#### 3. Restart Services
 
 ```bash
-# Reiniciar rsyslog
+# Restart rsyslog
 sudo systemctl restart rsyslog
 
-# Recargar Samba
+# Reload Samba
 sudo smbcontrol all reload-config
 ```
 
-### 📝 Visualización de Logs
+### 📝 Log Visualization
 
 ```bash
-# Ver logs en tiempo real
+# View logs in real-time
 sudo tail -f /var/log/samba_audit.log
 
-# Buscar eventos específicos
+# Search specific events
 sudo grep "unlinkat" /var/log/samba_audit.log
 sudo grep "bob" /var/log/samba_audit.log
 ```
 
-**Ejemplo de entrada de log**:
+**Example log entry**:
 
 ```
 Jan 15 14:23:45 ls03 smbd_audit: bob|192.168.2.100|lc03|StudentDocs|unlinkat|ok|file_deleted.txt
 ```
 
-**Formato**: `usuario|IP_origen|hostname|recurso|acción|resultado|archivo`
+**Format**: `user|source_IP|hostname|resource|action|result|file`
 
-![Logs de auditoría](/evidencias/08-auditoria/audit-logs.png)
+![Audit logs](/evidencias/08-auditoria/audit-logs.png)
 
-### 🔒 Políticas de Seguridad
+### 🔒 Security Policies
 
-#### Política de Contraseñas
+#### Password Policy
 
 ```bash
-# Ver configuración actual
+# View current configuration
 samba-tool domain passwordsettings show
 
-# Configurar
+# Configure
 sudo samba-tool domain passwordsettings set --complexity=on
 sudo samba-tool domain passwordsettings set --min-pwd-length=10
 sudo samba-tool domain passwordsettings set --min-pwd-age=1
@@ -1337,7 +1347,7 @@ sudo samba-tool domain passwordsettings set --max-pwd-age=90
 sudo samba-tool domain passwordsettings set --history-length=12
 ```
 
-#### Política de Bloqueo de Cuenta
+#### Account Lockout Policy
 
 ```bash
 sudo samba-tool domain passwordsettings set --account-lockout-threshold=5
@@ -1347,27 +1357,27 @@ sudo samba-tool domain passwordsettings set --reset-account-lockout-after=15
 
 ---
 
-## 12. Automatización y Tareas Programadas
+## 12. Automation and Scheduled Tasks
 
-### 💾 Script de Backup Automático
+### 💾 Automatic Backup Script
 
-#### 1. Crear el Script
+#### 1. Create Script
 
 ```bash
 sudo nano /root/backup_samba.sh
 ```
 
-Contenido del script:
+Script content:
 
 ```bash
 #!/bin/bash
 
-# --- CONFIGURACIÓN ---
+# --- CONFIGURATION ---
 DIR_DESTINO="/root/backups"
 LOG_FILE="/var/log/samba_backup.log"
 DIAS_A_GUARDAR=30
 
-# --- COMANDOS (rutas absolutas) ---
+# --- COMMANDS (absolute paths) ---
 TAR=/bin/tar
 DATE=/bin/date
 ECHO=/bin/echo
@@ -1378,184 +1388,183 @@ FECHA=$($DATE +%F_%H-%M)
 NOMBRE_ARCHIVO="backup_ad_$FECHA.tar.gz"
 RUTA_COMPLETA="$DIR_DESTINO/$NOMBRE_ARCHIVO"
 
-# Crear directorio de destino si no existe
+# Create destination directory if it doesn't exist
 mkdir -p $DIR_DESTINO
 
-# --- 1. EJECUTAR BACKUP ---
+# --- 1. EXECUTE BACKUP ---
 $TAR -czf $RUTA_COMPLETA /var/lib/samba /etc/samba 2>/dev/null
 
-# --- 2. VERIFICACIÓN Y LOG ---
+# --- 2. VERIFICATION AND LOG ---
 if [ $? -eq 0 ]; then
-    $ECHO "[$FECHA] OK: Backup creado: $NOMBRE_ARCHIVO" >> $LOG_FILE
+    $ECHO "[$FECHA] OK: Backup created: $NOMBRE_ARCHIVO" >> $LOG_FILE
     
-    # --- 3. LIMPIEZA ---
+    # --- 3. CLEANUP ---
     $FIND $DIR_DESTINO -name "backup_ad_*.tar.gz" -mtime +$DIAS_A_GUARDAR -delete
 else
-    $ECHO "[$FECHA] ERROR: Falló backup" >> $LOG_FILE
+    $ECHO "[$FECHA] ERROR: Backup failed" >> $LOG_FILE
 fi
 ```
 
-#### 2. Hacer el Script Ejecutable
+#### 2. Make Script Executable
 
 ```bash
 sudo chmod +x /root/backup_samba.sh
 ```
 
-#### 3. Programar con Cron
+#### 3. Schedule with Cron
 
 ```bash
 sudo crontab -e
 ```
 
-Añadir al final (backup diario a las 9:15):
+Add at the end (daily backup at 9:15):
 
 ```
 15 9 * * * /root/backup_samba.sh
 ```
 
-**Formato Cron**: `m h dom mon dow command`
+**Cron format**: `m h dom mon dow command`
 
-| Campo | Valor | Descripción |
+| Field | Value | Description |
 |-------|-------|-------------|
-| m | 15 | Minuto (15) |
-| h | 9 | Hora (09:00) |
-| dom | * | Día del mes (todos) |
-| mon | * | Mes (todos) |
-| dow | * | Día de la semana (todos) |
+| m | 15 | Minute (15) |
+| h | 9 | Hour (09:00) |
+| dom | * | Day of month (all) |
+| mon | * | Month (all) |
+| dow | * | Day of week (all) |
 
-#### 4. Verificar Funcionamiento
+#### 4. Verify Operation
 
 ```bash
-# Ejecutar manualmente
+# Execute manually
 sudo /root/backup_samba.sh
 
-# Ver log
+# View log
 cat /var/log/samba_backup.log
 
-# Listar backups
+# List backups
 ls -lh /root/backups/
 ```
 
-![Script de backup](/evidencias/08-auditoria/backup-script.png)
+![Backup script](/evidencias/08-auditoria/backup-script.png)
 
-### 📊 Monitorización de Procesos
+### 📊 Process Monitoring
 
-#### htop - Monitorización en Tiempo Real
+#### htop - Real-time Monitoring
 
 ```bash
-# Instalar
+# Install
 sudo apt install htop
 
-# Ejecutar
+# Run
 htop
 ```
 
-**Filtrar procesos de Samba**:
-1. Presionar `F4` (Filter)
-2. Escribir: `samba`
-3. Ver procesos relacionados con AD
+**Filter Samba processes**:
+1. Press `F4` (Filter)
+2. Type: `samba`
+3. View AD-related processes
 
-![Monitorización con htop](/evidencias/08-auditoria/htop-monitoring.png)
+![Monitoring with htop](/evidencias/08-auditoria/htop-monitoring.png)
 
-#### Gestión Remota de Procesos vía SSH
+#### Remote Process Management via SSH
 
 ```bash
-# Conectar remotamente al cliente
+# Connect remotely to client
 ssh bob@lab03.local@lc03.lab03.local
 
-# Listar procesos del usuario
+# List user processes
 ps -aux | grep bob
 
-# Pausar un proceso
+# Pause a process
 kill -19 <PID>
 
-# Reanudar un proceso
+# Resume a process
 kill -18 <PID>
 
-# Terminar un proceso
+# Terminate a process
 kill -9 <PID>
 ```
 
 ---
 
-## 📊 Estado del Proyecto
+## 📊 Project Status
 
-### ✅ Tareas Completadas
+### ✅ Completed Tasks
 
-- [x] Repositorio creado
-- [x] Instalación base de Ubuntu Server
-- [x] Configuración de red estática
-- [x] Instalación y configuración de Samba AD DC
-- [x] Creación de usuarios, grupos y OUs
-- [x] Unión de clientes Linux y Windows al dominio
-- [x] Configuración de GPOs híbridas (Linux/Windows)
-- [x] Implementación de recursos compartidos
-- [x] Configuración de permisos y ACLs
-- [x] Montaje automático de recursos en Linux
-- [x] Creación de confianzas de dominio (Forest Trust)
-- [x] Configuración de auditoría y seguridad
-- [x] Implementación de scripts de backup
-- [x] Tareas programadas con Cron
-- [x] Documentación completa del proyecto
+- [x] Repository created
+- [x] Ubuntu Server base installation
+- [x] Static network configuration
+- [x] Samba AD DC installation and configuration
+- [x] Users, groups and OUs creation
+- [x] Linux and Windows client joining to domain
+- [x] Hybrid GPO configuration (Linux/Windows)
+- [x] Shared resources implementation
+- [x] Permissions and ACLs configuration
+- [x] Automatic resource mounting on Linux
+- [x] Domain trust creation (Forest Trust)
+- [x] Auditing and security configuration
+- [x] Backup scripts implementation
+- [x] Scheduled tasks with Cron
+- [x] Complete project documentation
 
 ---
 
-## 📚 Recursos Adicionales
+## 📚 Additional Resources
 
-### 📖 Documentación Oficial
+### 📖 Official Documentation
 
 - [Samba Wiki - AD DC](https://wiki.samba.org/index.php/Setting_up_Samba_as_an_Active_Directory_Domain_Controller)
 - [Samba Wiki - Trust Relationships](https://wiki.samba.org/index.php/Trust_Relationships)
 - [Ubuntu Server Documentation](https://ubuntu.com/server/docs)
 - [Kerberos Documentation](https://web.mit.edu/kerberos/krb5-latest/doc/)
 
-### 🎓 Guías y Tutoriales
+### 🎓 Guides and Tutorials
 
 - [Red Hat - Integrating Linux with Active Directory](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/integrating_rhel_systems_directly_with_windows_active_directory/)
 - [ArchWiki - Active Directory Integration](https://wiki.archlinux.org/title/Active_Directory_integration)
 
-### 🛠️ Herramientas Útiles
+### 🛠️ Useful Tools
 
 - [RSAT Tools](https://www.microsoft.com/en-us/download/details.aspx?id=45520) - Remote Server Administration Tools
-- [Apache Directory Studio](https://directory.apache.org/studio/) - Cliente LDAP gráfico
-- [Wireshark](https://www.wireshark.org/) - Análisis de tráfico de red
+- [Apache Directory Studio](https://directory.apache.org/studio/) - Graphical LDAP client
+- [Wireshark](https://www.wireshark.org/) - Network traffic analysis
 
 ---
 
-## 🤝 Contribuciones
+## 🤝 Contributions
 
-Este proyecto es de carácter educativo. Si deseas contribuir con mejoras o correcciones:
+This project is educational in nature. If you wish to contribute improvements or corrections:
 
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork the repository
+2. Create a branch for your feature (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
+## ✍️ Author
 
-## ✍️ Autor
+**Systems Administrator**
 
-**Administrador de Sistemas**
-
-- 🎓 Proyecto de prácticas - Active Directory en Linux
-- 📧 Contacto: [rsaura9@gmail.com]
+- 🎓 Internship Project - Active Directory on Linux
+- 📧 Contact: [rsaura9@gmail.com]
 - 🐙 GitHub: [@Psyaura](https://github.com/psyaura)
 
 ---
 
-## 🙏 Agradecimientos
+## 🙏 Acknowledgments
 
-- A la comunidad de Samba por su excelente documentación
-- A Canonical por Ubuntu Server
-- A todos los que contribuyen al software libre
+- To the Samba community for their excellent documentation
+- To Canonical for Ubuntu Server
+- To all who contribute to free software
 
 ---
 
 <div align="center">
 
-**🌟 Si este proyecto te ha sido útil, no olvides darle una estrella 🌟**
+**🌟 If this project has been useful to you, don't forget to give it a star 🌟**
 
 [![Star this repo](https://img.shields.io/github/stars/tu-usuario/Domain-Controller-Active-Directory-with-Ubuntu-Server?style=social)](https://github.com/tu-usuario/Domain-Controller-Active-Directory-with-Ubuntu-Server)
 
@@ -1564,5 +1573,5 @@ Este proyecto es de carácter educativo. Si deseas contribuir con mejoras o corr
 ---
 
 <div align="center">
-<sub>Desarrollado con ❤️  para fines educativos | 2025</sub>
+<sub>Developed with ❤️ for educational purposes | 2025</sub>
 </div>
