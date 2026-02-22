@@ -91,4 +91,4 @@ The following screenshots document this process:
 └── hosts_final.png                     - Final configured /etc/hosts file
 ```
 
-[⬅️ Previous: Base Installation](01-instalacion-base.md) | [📚 Index](README.md) | [➡️ Next: Samba AD DC](03-samba-ad-dc.md)
+[⬅️ Previous: Base Installation](01-Installing.md) | [📚 Index](README.md) | [➡️ Next: Samba AD DC](03-samba-ad-dc.md)
