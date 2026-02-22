@@ -27,6 +27,27 @@ This repository includes detailed technical documentation, step-by-step configur
 - ✅ **Task automation** with Cron and backup scripts
 - ✅ **Process management and system monitoring**
 
+## 📋 Prerequisites
+
+Before starting this project, ensure you have:
+
+### Software Requirements
+- ✅ VirtualBox 7.x or later installed
+- ✅ Ubuntu Server 24.04 LTS ISO downloaded
+- ✅ Ubuntu Desktop 24.04 LTS ISO (for client testing)
+- ✅ Windows 10/11 Pro ISO (optional, for Windows client)
+
+### Knowledge Requirements
+- 📚 Basic Linux command line
+- 📚 Basic networking concepts (IP, DNS, subnets)
+- 📚 Understanding of Active Directory concepts
+- 📚 Familiarity with virtualization
+
+### Hardware Requirements (Host Machine)
+- 💻 Minimum 16 GB RAM (to run multiple VMs)
+- 💾 100 GB free disk space
+- ⚡ CPU with virtualization support (VT-x/AMD-V enabled)
+
 ## 🛠️ Technologies Used
 
 | Technology | Version | Purpose |
