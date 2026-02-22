@@ -563,8 +563,14 @@ su - bob@lab03.local
 
 #### 🖱️ Login Gráfico (GDM)
 
-Para permitir login gráfico con usuarios del dominio:
+##### 🏠 Creación Automática de Directorios Home
+```bash
+sudo pam-auth-update --enable mkhomedir
+```
 
+> 🔄 Cerrar sesión y volver a iniciar sesión gráficamente con un usuario del dominio.
+
+##### ⚠️ Si el login gráfico no permite acceso:
 ```bash
 sudo nano /etc/pam.d/gdm-password
 ```
