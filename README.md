@@ -1534,11 +1534,6 @@ Este proyecto es de carácter educativo. Si deseas contribuir con mejoras o corr
 
 ---
 
-## 📄 Licencia
-
-Este proyecto está bajo la licencia educativa. Ver el archivo [LICENSE](LICENSE) para más detalles.
-
----
 
 ## ✍️ Autor
 
