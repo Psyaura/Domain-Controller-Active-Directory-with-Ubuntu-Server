@@ -1113,7 +1113,51 @@ sudo systemctl start samba-ad-dc
 
 ### 🌐 Configuración DNS para Trusts
 
-#### Opción 1: Reenviadores Condicionales (Recomendado)
+#### Opción 1: Configuracion Manual
+
+En cada DC, el `resolv.conf` debe apuntar a sí mismo:**
+```bash
+sudo systemctl disable systemd-resolved
+sudo systemctl stop systemd-resolved
+sudo rm /etc/resolv.conf
+```
+```bash
+# En dc01 (lab03.local)
+echo "nameserver 192.168.2.30" > /etc/resolv.conf
+echo "search lab03.local" >> /etc/resolv.conf
+
+# En dc02 (lab04.local)
+echo "nameserver 192.168.2.40" > /etc/resolv.conf
+echo "search lab04.local" >> /etc/resolv.conf
+```
+```bash
+sudo systemctl restart samba-ad-dc
+```
+
+**Configurar forwarder en cadena en `smb.conf`:**
+
+```ini
+# dc01/smb.conf → reenvía a dc02
+dns forwarder = 192.168.2.40
+
+# dc02/smb.conf → reenvía a internet
+dns forwarder = 192.168.2.30
+```
+
+> De esta forma dc01 resuelve `lab04.local` a través de dc02, y dc02 resuelve internet a través de Google DNS.
+
+**Añadir registros en `/etc/hosts` de cada DC:**
+
+```bash
+# En dc01
+echo "192.168.2.40    dc02.lab04.local    lab04.local" >> /etc/hosts
+
+# En dc02
+echo "192.168.2.30    dc01.lab03.local    lab03.local" >> /etc/hosts
+```
+
+
+#### Opción 2: Reenviadores Condicionales 
 
 **En el servidor principal (ls03 - 192.168.2.2)**:
 
@@ -1149,7 +1193,6 @@ sudo samba-tool dns query 192.168.2.3 lab03.local @ ALL -U Administrator
 nslookup ls03.lab03.local
 ```
 
-![Configuración DNS Trust](/evidencias/07-trusts/dns-forwarders.png)
 
 ### 🤝 Creación de la Confianza
 
@@ -1174,8 +1217,7 @@ sudo samba-tool domain trust create lab03.local \
 sudo samba-tool domain trust list
 
 # Validar confianza
-sudo samba-tool domain trust validate lab03.local -U administrator
-```
+sudo samba-tool domain trust validate lab04.local -U Administrator@LAB04.LOCAL (Desde LAB03.LOCAL)``` 
 
 ![Confianza establecida](/evidencias/07-trusts/trust-validation.png)
 
