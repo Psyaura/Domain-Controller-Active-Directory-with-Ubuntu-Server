@@ -1217,9 +1217,8 @@ sudo samba-tool domain trust create lab03.local \
 sudo samba-tool domain trust list
 
 # Validar confianza
-sudo samba-tool domain trust validate lab04.local -U Administrator@LAB04.LOCAL (Desde LAB03.LOCAL)``` 
-
-![Confianza establecida](/evidencias/07-trusts/trust-validation.png)
+sudo samba-tool domain trust validate lab04.local -U Administrator@LAB04.LOCAL (Desde LAB03.LOCAL)
+``` 
 
 ### 🔍 Prueba Cross-Domain
 
