@@ -466,9 +466,9 @@ sudo nano /etc/netplan/00-installer-config.yaml(o el archivo que tu sistema cree
 network:
   version: 2
   ethernets:
-    enp0s3:  # Adaptador de red interna
+    enp0s3:  
       dhcp4: true
-    enp0s8:
+    enp0s8:  # Adaptador de red interna
       dhcp4: false
       addresses:
         - 192.168.1.3/24
