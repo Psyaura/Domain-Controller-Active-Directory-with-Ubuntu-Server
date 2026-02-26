@@ -244,6 +244,19 @@ sudo nano /etc/samba/smb.conf
     # --- Seguridad adicional ---
     hide dot files = yes
     follow symlinks = no
+
+
+[compartida]
+   path = /srv/compartida
+   valid users = "CLOUD03\lando"
+   read only = no
+   browsable = yes
+
+sudo mkdir -p /city/trap
+
+# El chown con usuario como grupo es raro — mejor usar solo el usuario
+sudo chown "CLOUD03\lando":"CLOUD03\lando" /city/trap
+sudo chmod 700 /city/trap
 ```
 
 ### 3. Referencia de directivas
