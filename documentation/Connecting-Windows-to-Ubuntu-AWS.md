@@ -1,395 +1,451 @@
-# Connecting to Ubuntu Server on AWS from Windows Server
+# 🖥️ Samba Active Directory DC en AWS + Carpetas Compartidas
 
-## 1. Create Key Pair Before Launching the Instance
-
-Before launching any Windows instance on AWS, you need to create a key pair to decrypt the Administrator password.
-
-1. Go to **EC2 → Key Pairs → Create Key Pair**
-2. Configure:
-   - **Type**: RSA
-   - **Format**: .pem
-3. The `.pem` file will download automatically — **save it securely**, it cannot be downloaded again.
-
-> **Important:** If you don't create the key pair with RSA format and PEM, you won't be able to decrypt the Windows password later.
-
-When launching the instance, select this key pair in **Network settings**.
+> **Guía técnica** — Despliegue de un Controlador de Dominio Samba 4 sobre Ubuntu Server en AWS EC2, con configuración completa de carpetas compartidas accesibles desde Windows.
+>
+> `Ubuntu Server 22.04` · `AWS EC2` · `Samba 4` · `Windows Client`
 
 ---
 
-## 2. Get Windows Password
+## 📋 Índice
 
-1. Go to **EC2 → Instances → select the Windows instance**
-2. **Actions → Security → Get Windows Password**
-3. Upload the `.pem` file or paste its content
-4. Click **Decrypt Password**
-5. Copy the generated password
-
-> The password may take 4-5 minutes to become available after first boot.
-
----
-
-## 3. Configure Security Group
-
-In the Security Group associated with the instances, configure the following rules:
-
-### 3.1 Inbound Rules
-
-#### RDP Access (from outside)
-
-| Type | Protocol | Port | Source |
-|------|----------|------|--------|
-| RDP  | TCP      | 3389 | My IP  |
-
-#### Ping Between Instances (internal network)
-
-| Type            | Protocol | Port | Source      |
-|-----------------|----------|------|-------------|
-| All ICMP - IPv4 | ICMP     | All  | 10.0.0.0/16 |
-
-#### Samba/SMB (for shared folders)
-
-| Type       | Protocol | Port    | Source      |
-|------------|----------|---------|-------------|
-| Custom TCP | TCP      | 445     | 10.0.0.0/16 |
-| Custom TCP | TCP      | 139     | 10.0.0.0/16 |
-| Custom UDP | UDP      | 137-138 | 10.0.0.0/16 |
-
-#### SSH Access (to Ubuntu Server)
-
-| Type | Protocol | Port | Source |
-|------|----------|------|--------|
-| SSH  | TCP      | 22   | My IP  |
-
-### 3.2 Outbound Rules
-
-⚠️ **CRITICAL: Configure outbound traffic**
-
-| Type        | Protocol | Port Range | Destination |
-|-------------|----------|------------|-------------|
-| All traffic | All      | All        | 0.0.0.0/0   |
-
-> **Important:** Without the outbound rule allowing all traffic, instances won't be able to communicate with each other or access the internet for updates and package downloads.
-
-> Adjust the CIDR `10.0.0.0/16` to match your VPC range.
+- [Arquitectura del entorno](#-arquitectura-del-entorno)
+- [Preparación del servidor](#-preparación-del-servidor)
+- [Promoción del controlador de dominio](#-promoción-del-controlador-de-dominio)
+- [Verificación del dominio](#-verificación-del-dominio)
+- [Configuración de carpetas compartidas](#-configuración-de-carpetas-compartidas)
+- [Unir el cliente Windows al dominio](#-unir-el-cliente-windows-al-dominio)
+- [Gestión de usuarios y grupos](#-gestión-de-usuarios-y-grupos)
+- [Troubleshooting](#-troubleshooting)
+- [Cheatsheet — Comandos clave](#-cheatsheet--comandos-clave)
 
 ---
 
-## 4. Network Prerequisites
+## 🏗️ Arquitectura del entorno
 
-### 4.1 Verify VPC Configuration
+| Parámetro | Valor |
+|---|---|
+| SO Servidor | Ubuntu Server 22.04 LTS (EC2 en AWS) |
+| Servicio AD | Samba 4 — Controlador de Dominio |
+| Dominio | `ASIR.LOCAL` |
+| Realm Kerberos | `ASIR.LOCAL` |
+| IP Servidor | `172.31.16.133` (privada AWS) |
+| Cliente | Windows 10/11 unido al dominio |
 
-Ensure both instances are in the same VPC:
-
-1. Go to **EC2 → Instances**
-2. Select each instance and check the **VPC ID** in the details tab
-3. Both must have the same VPC ID
-
-### 4.2 Verify Subnet Configuration (Optional)
-
-For better performance, place both instances in the same subnet or ensure proper routing between subnets.
-
-### 4.3 Note Private IP Addresses
-
-Get the private IP addresses of both instances:
-```
-Windows Server: 172.31.XX.XX (example)
-Ubuntu Server:  172.31.YY.YY (example)
-```
-
-These will be used for internal communication.
+> ⚠️ **Security Groups AWS** — Asegúrate de abrir los siguientes puertos de entrada:
+> `53` (DNS) · `88` (Kerberos) · `389` (LDAP) · `445` (SMB) · `636` (LDAPS) · `3268` (Global Catalog)
 
 ---
 
-## 5. Configure Samba on Ubuntu Server
+## ⚙️ Preparación del servidor
 
-Before connecting from Windows, ensure Samba is properly configured on Ubuntu:
+### 1. Actualización y dependencias
+
 ```bash
-# Install Samba
-sudo apt update
-sudo apt install samba -y
+# Actualizar el sistema
+sudo apt update && sudo apt upgrade -y
 
-# Create a shared directory
-sudo mkdir -p /srv/samba/shared
-sudo chmod 777 /srv/samba/shared
+# Instalar Samba y herramientas necesarias
+sudo apt install -y samba krb5-config krb5-user winbind \
+    libnss-winbind libpam-winbind smbclient
 
-# Configure Samba
+# Detener y deshabilitar servicios por defecto
+sudo systemctl stop smbd nmbd winbind
+sudo systemctl disable smbd nmbd winbind
+```
+
+### 2. Configurar el hostname
+
+El hostname debe coincidir con el nombre NetBIOS del DC:
+
+```bash
+sudo hostnamectl set-hostname dc1.asir.local
+
+# Editar /etc/hosts — añadir la línea con el FQDN
+sudo nano /etc/hosts
+# Añadir: 172.31.16.133  dc1.asir.local  dc1
+
+# Verificar
+hostname -f
+```
+
+### 3. Configurar DNS para que apunte a sí mismo
+
+Samba AD incluye su propio servidor DNS, por lo que el servidor debe usarse como DNS primario:
+
+```bash
+# Editar configuración de red Netplan (Ubuntu 22.04)
+sudo nano /etc/netplan/00-installer-config.yaml
+
+# Asegurarse de tener:
+#   nameservers:
+#     addresses: [127.0.0.1]
+
+sudo netplan apply
+```
+
+---
+
+## 🚀 Promoción del controlador de dominio
+
+### 1. Respaldar y eliminar smb.conf existente
+
+```bash
+sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
+```
+
+### 2. Provisionar el dominio con samba-tool
+
+```bash
+sudo samba-tool domain provision \
+    --use-rfc2307 \
+    --realm=ASIR.LOCAL \
+    --domain=ASIR \
+    --adminpass='P@ssw0rd123!' \
+    --dns-backend=SAMBA_INTERNAL \
+    --server-role=dc
+```
+
+| Flag | Descripción |
+|---|---|
+| `--use-rfc2307` | Añade atributos POSIX (UID/GID) al esquema AD |
+| `--realm` | Kerberos realm, siempre en **MAYÚSCULAS** |
+| `--domain` | Nombre NetBIOS del dominio (máx. 15 chars) |
+| `--adminpass` | Contraseña del administrador del dominio |
+| `--dns-backend` | `SAMBA_INTERNAL` usa el DNS propio de Samba |
+| `--server-role=dc` | Rol de controlador de dominio primario |
+
+### 3. Copiar configuración Kerberos
+
+```bash
+# Samba genera un krb5.conf optimizado para el dominio
+sudo cp /var/lib/samba/private/krb5.conf /etc/krb5.conf
+```
+
+### 4. Iniciar y habilitar samba-ad-dc
+
+```bash
+sudo systemctl unmask samba-ad-dc
+sudo systemctl enable samba-ad-dc
+sudo systemctl start samba-ad-dc
+
+# Verificar estado
+sudo systemctl status samba-ad-dc
+```
+
+---
+
+## ✅ Verificación del dominio
+
+### Nivel funcional del dominio
+
+```bash
+sudo samba-tool domain level show
+```
+
+### Verificar registros DNS del AD
+
+```bash
+# Registro SRV de LDAP (confirma que el AD está operativo)
+host -t SRV _ldap._tcp.asir.local 127.0.0.1
+
+# Registro de Kerberos
+host -t SRV _kerberos._udp.asir.local 127.0.0.1
+
+# Resolver el propio DC
+host -t A dc1.asir.local 127.0.0.1
+```
+
+### Obtener ticket Kerberos del administrador
+
+```bash
+kinit administrator@ASIR.LOCAL
+
+# Ver tickets activos
+klist
+```
+
+> 💡 Si `kinit` funciona correctamente, la autenticación Kerberos del dominio está operativa. Este paso es clave antes de unir equipos al dominio.
+
+### Verificar con smbclient
+
+```bash
+smbclient -L localhost -U administrator
+# Debería listar: sysvol, netlogon y los shares configurados
+```
+
+---
+
+## 📁 Configuración de carpetas compartidas
+
+### 1. Crear la estructura de directorios
+
+```bash
+# Crear directorios para los shares
+sudo mkdir -p /srv/samba/ITDocs
+sudo mkdir -p /srv/samba/netlogon
+
+# Crear grupo si no existe
+sudo groupadd sambashare
+
+# Asignar grupo y permisos
+sudo chown -R root:sambashare /srv/samba/ITDocs
+sudo chmod -R 2770 /srv/samba/ITDocs
+```
+
+### 2. Configurar smb.conf
+
+Editar `/etc/samba/smb.conf` y añadir las secciones al final:
+
+```bash
 sudo nano /etc/samba/smb.conf
 ```
 
-Add at the end of `smb.conf`:
 ```ini
-[Shared]
-    path = /srv/samba/shared
+[global]
+    workgroup = ASIR
+    realm = ASIR.LOCAL
+    netbios name = DC1
+    server role = active directory domain controller
+    dns forwarder = 8.8.8.8
+    idmap_ldb:use rfc2307 = yes
+
+# ── Shares de sistema (obligatorios en un DC) ──────────────
+[sysvol]
+    path = /var/lib/samba/sysvol
+    read only = no
+
+[netlogon]
+    path = /var/lib/samba/sysvol/asir.local/scripts
+    read only = no
+
+# ── Share de documentación IT ──────────────────────────────
+[ITDocs]
+    # --- Ruta y descripción ---
+    path = /srv/samba/ITDocs
+    comment = Documentación del departamento IT
+
+    # --- Visibilidad y acceso ---
     browseable = yes
     writable = yes
     guest ok = no
-    valid users = ubuntu
+    valid users = @admins @"domain users"   ; grupos permitidos
+    invalid users = root baduser @guests    ; usuarios/grupos denegados
+
+    # --- Permisos de ficheros ---
+    read only = no
+    create mask = 0664
+    directory mask = 0775
+    force group = sambashare
+
+    # --- Rendimiento ---
+    oplocks = yes
+    level2 oplocks = yes
+
+    # --- Seguridad adicional ---
+    hide dot files = yes
+    follow symlinks = no
 ```
 
-Create Samba user:
-```bash
-# Add Samba user (use the same username as your Ubuntu user)
-sudo smbpasswd -a ubuntu
+### 3. Referencia de directivas
 
-# Restart Samba
-sudo systemctl restart smbd
-sudo systemctl enable smbd
-```
+| Directiva | Descripción |
+|---|---|
+| `valid users` | Lista blanca de usuarios/grupos (`@grupo`). Solo ellos pueden conectar. |
+| `invalid users` | Lista negra. Rechaza el acceso aunque el usuario esté en `valid users`. Útil para bloquear `root`. |
+| `create mask` | Permisos UNIX de los ficheros creados desde Windows (`0664` = rw-rw-r--) |
+| `directory mask` | Permisos UNIX de las carpetas creadas desde Windows (`0775` = rwxrwxr-x) |
+| `force group` | Fuerza que los ficheros creados pertenezcan a este grupo. Útil para acceso compartido entre usuarios. |
+| `oplocks` | Permite caché local en el cliente Windows. Mejora rendimiento en redes estables. |
+| `hide dot files` | Oculta ficheros de Linux que empiezan por `.` (ej. `.bashrc`) a los clientes Windows. |
+| `follow symlinks` | En `no`, evita que un usuario escape del share siguiendo un enlace simbólico. |
+| `browseable` | Si el share aparece en la lista de red. En `no`, existe pero hay que acceder por ruta directa. |
+| `comment` | Descripción visible en el Explorador de Windows al listar los shares. |
 
-Verify Samba is running:
+### 4. Aplicar cambios
+
 ```bash
-sudo systemctl status smbd
+# Verificar sintaxis antes de reiniciar
+sudo testparm
+
+# Reiniciar el servicio
+sudo systemctl restart samba-ad-dc
+
+# Confirmar que el share aparece
+smbclient -L localhost -U administrator
 ```
 
 ---
 
-## 6. Connect to Windows Server via RDP
+## 🪟 Unir el cliente Windows al dominio
 
-Installation on Ubuntu Server with `xfreerdp`:
-```bash
-sudo apt install freerdp2-x11 -y
+### 1. Configurar DNS en Windows
+
+El cliente Windows debe usar el DC de Samba como DNS primario:
+
+```
+Panel de Control → Centro de redes → Cambiar configuración del adaptador
+→ Propiedades TCP/IPv4
+→ DNS preferido: 172.31.16.133
 ```
 
-From terminal with `xfreerdp`:
-```bash
-xfreerdp /v:ec2-54-198-175-214.compute-1.amazonaws.com /u:Administrator /p:'YourPasswordHere'
+### 2. Unir al dominio
+
+```
+Sistema → Cambiar configuración → Cambiar nombre o dominio
+→ Dominio: asir.local
+→ Credenciales: administrator / P@ssw0rd123!
+→ Reiniciar el equipo
 ```
 
-Or using the public IP:
-```bash
-xfreerdp /v:<WINDOWS_PUBLIC_IP> /u:Administrator /p:'YourPasswordHere'
+### 3. Acceder a los shares desde Windows
+
+```cmd
+:: Listar shares del DC
+net view \\172.31.16.133
+
+:: Mapear unidad de red
+net use Z: \\172.31.16.133\ITDocs /persistent:yes
+
+:: Ver conexiones SMB activas
+net use
+
+:: Limpiar todas las sesiones (fix del error de múltiples conexiones)
+net use * /delete
 ```
 
-When connecting for the first time, accept the self-signed certificate with **Y**.
-
-> **Tip:** If you prefer a GUI RDP client, install Remmina: `sudo apt install remmina -y`
+> 💡 Si aparece el error **"Multiple connections to a server by the same user using more than one user name"**, ejecuta `net use * /delete` para eliminar las sesiones previas y vuelve a conectar.
 
 ---
 
-## 7. Access Ubuntu Server Shared Folders from Windows
+## 👥 Gestión de usuarios y grupos
 
-Once inside Windows Server via RDP:
+### Usuarios
 
-### 7.1 Enable Network Discovery
-
-Open PowerShell as Administrator and run:
-```powershell
-netsh advfirewall firewall set rule group="Network Discovery" new enable=Yes
-netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=Yes
-```
-
-### 7.2 Change Network Profile to Private
-```powershell
-Set-NetConnectionProfile -InterfaceAlias "Ethernet" -NetworkCategory Private
-```
-
-Verify the change:
-```powershell
-Get-NetConnectionProfile
-```
-
-### 7.3 Access Shared Resources
-
-Open File Explorer and type in the address bar:
-```
-\\<UBUNTU_PRIVATE_IP>
-```
-
-Example:
-```
-\\172.31.16.133
-```
-
-Enter the Ubuntu server's Samba credentials when prompted:
-- **Username:** ubuntu
-- **Password:** [the password you set with smbpasswd]
-
----
-
-## 8. Connectivity Verification
-
-### 8.1 From Windows Server
-
-Open PowerShell and run:
-```powershell
-# Check ping
-ping 172.31.16.133
-
-# Check SMB port
-Test-NetConnection 172.31.16.133 -Port 445
-
-# Check network adapter
-ipconfig /all
-```
-
-### 8.2 From Ubuntu Server
 ```bash
-# Check Samba status
-sudo systemctl status smbd
+# Crear un usuario en el dominio
+sudo samba-tool user create raul 'P@ssw0rd123!' \
+    --given-name=Raul \
+    --surname=Apellido \
+    --mail-address=raul@asir.local
 
-# Check listening ports
-sudo netstat -tulpn | grep smbd
+# Listar todos los usuarios del dominio
+sudo samba-tool user list
 
-# Check firewall (UFW) status
-sudo ufw status
+# Mostrar detalles de un usuario
+sudo samba-tool user show raul
 
-# Test connection to Windows
-ping <WINDOWS_PRIVATE_IP>
+# Cambiar contraseña
+sudo samba-tool user setpassword raul --newpassword='NuevoPass123!'
+
+# Deshabilitar / habilitar usuario
+sudo samba-tool user disable raul
+sudo samba-tool user enable raul
+```
+
+### Grupos
+
+```bash
+# Crear un grupo
+sudo samba-tool group add admins
+
+# Añadir usuario a un grupo
+sudo samba-tool group addmembers admins raul
+
+# Ver miembros de un grupo
+sudo samba-tool group listmembers admins
+
+# Listar todos los grupos
+sudo samba-tool group list
+
+# Eliminar usuario de un grupo
+sudo samba-tool group removemembers admins raul
 ```
 
 ---
 
-## 9. Troubleshooting
+## 🔧 Troubleshooting
 
-### Problem: Cannot connect via RDP
+### Comandos de diagnóstico
 
-**Solutions:**
-1. Verify Security Group allows RDP (port 3389) from your IP
-2. Check that the Windows instance is running
-3. Wait 4-5 minutes after first launch for password to be available
-4. Verify you're using the correct public DNS/IP
-
-### Problem: Cannot ping between instances
-
-**Solutions:**
-1. Verify Security Group allows ICMP traffic
-2. Check both instances are in the same VPC
-3. Verify **outbound rules** allow all traffic
-4. Check Windows Firewall is not blocking ICMP
-
-### Problem: Cannot access Samba shares
-
-**Solutions:**
-
-**On Ubuntu Server:**
 ```bash
-# Restart Samba
-sudo systemctl restart smbd
+# Ver logs de Samba en tiempo real
+sudo journalctl -fu samba-ad-dc
 
-# Check if port 445 is open
-sudo ufw allow 445/tcp
-sudo ufw allow 139/tcp
-sudo ufw allow 137:138/udp
+# Verificar el servicio
+sudo systemctl status samba-ad-dc
 
-# Verify Samba user exists
-sudo pdbedit -L
+# Comprobar puertos abiertos por Samba
+sudo ss -tlnp | grep samba
+
+# Verificar DNS desde el servidor
+dig @127.0.0.1 asir.local
+dig @127.0.0.1 _ldap._tcp.asir.local SRV
+
+# Autenticación Kerberos
+kinit administrator@ASIR.LOCAL && klist
+
+# Buscar objetos en el directorio LDAP
+sudo ldbsearch -H /var/lib/samba/private/sam.ldb \
+    -b 'DC=asir,DC=local' '(objectClass=user)'
 ```
 
-**On Windows Server:**
-```powershell
-# Reset network discovery
-netsh advfirewall firewall set rule group="Network Discovery" new enable=Yes
-netsh advfirewall firewall set rule group="File and Printer Sharing" new enable=Yes
+### Problemas frecuentes
 
-# Flush DNS
-ipconfig /flushdns
-
-# Check connectivity
-Test-NetConnection <UBUNTU_PRIVATE_IP> -Port 445
-```
-
-### Problem: "Network path not found"
-
-**Solutions:**
-1. Verify you're using the **private IP** (172.31.x.x), not public IP
-2. Check Samba service is running on Ubuntu
-3. Verify credentials are correct
-4. Try accessing with FQDN: `\\ip-172-31-16-133.ec2.internal`
-
-### Problem: Outbound traffic blocked
-
-**Symptoms:**
-- Cannot download packages with `apt` or `yum`
-- Instances cannot communicate
-- Cannot access internet from instances
-
-**Solution:**
-1. Go to **EC2 → Security Groups**
-2. Select your Security Group
-3. **Outbound rules** tab
-4. Click **Edit outbound rules**
-5. Ensure there's a rule:
-   - Type: All traffic
-   - Destination: 0.0.0.0/0
+| Problema | Solución |
+|---|---|
+| `samba-ad-dc` no arranca | Verificar sintaxis con `testparm` y revisar `journalctl -u samba-ad-dc` |
+| Error DNS en Windows | Confirmar que el DNS del cliente apunta a la IP del servidor Samba |
+| `kinit` falla | Comprobar que `/etc/krb5.conf` está copiado correctamente del provisionado |
+| Share no accesible | Revisar permisos con `ls -la` y confirmar que el usuario está en `valid users` |
+| Múltiples conexiones SMB | Ejecutar `net use * /delete` en el cliente Windows |
+| Clock skew en Kerberos | Sincronizar hora del cliente con el DC — `timedatectl` en Linux, hora del servidor en Windows |
+| Usuario no puede escribir | Verificar `create mask`, `directory mask` y que el usuario pertenece a `sambashare` |
 
 ---
 
-## 10. Best Practices
+## 📌 Cheatsheet — Comandos clave
 
-### Security Recommendations
-
-1. **Use Elastic IP** for Windows Server if you need a fixed public IP
-2. **Restrict RDP access** to specific IPs instead of 0.0.0.0/0
-3. **Use VPN or AWS Session Manager** instead of exposing RDP to the internet
-4. **Enable CloudWatch** for monitoring instance health
-5. **Regular backups** with AMI snapshots
-6. **Use IAM roles** instead of storing credentials
-
-### Network Optimization
-
-1. Place instances in the same **Availability Zone** for lower latency
-2. Use **Enhanced Networking** for better performance
-3. Consider **VPC Peering** for multi-VPC setups
-4. Use **PrivateLink** for accessing AWS services without internet gateway
-
-### Cost Optimization
-
-1. Use **t3** instances for development/testing (cheaper)
-2. **Stop instances** when not in use (you still pay for storage)
-3. Use **Spot Instances** for non-critical workloads
-4. Monitor with **AWS Cost Explorer**
-
----
-
-## 11. Quick Reference Commands
-
-### Ubuntu Server
 ```bash
-# Check Samba status
-sudo systemctl status smbd
+# ── PROVISIÓN DEL DOMINIO ──────────────────────────────────────────
+sudo samba-tool domain provision --use-rfc2307 --realm=ASIR.LOCAL \
+    --domain=ASIR --adminpass='P@ssw0rd123!' \
+    --dns-backend=SAMBA_INTERNAL --server-role=dc
 
-# View Samba logs
-sudo tail -f /var/log/samba/log.smbd
+# ── KERBEROS ───────────────────────────────────────────────────────
+sudo cp /var/lib/samba/private/krb5.conf /etc/krb5.conf
 
-# List Samba users
-sudo pdbedit -L
+# ── INICIAR SERVICIO ───────────────────────────────────────────────
+sudo systemctl unmask samba-ad-dc
+sudo systemctl enable --now samba-ad-dc
 
-# Test Samba configuration
-testparm
+# ── VERIFICACIÓN ───────────────────────────────────────────────────
+sudo samba-tool domain level show
+host -t SRV _ldap._tcp.asir.local 127.0.0.1
+kinit administrator@ASIR.LOCAL && klist
+smbclient -L localhost -U administrator
+sudo testparm
 
-# Check network interfaces
-ip addr show
+# ── USUARIOS ───────────────────────────────────────────────────────
+sudo samba-tool user create <usuario> <contraseña>
+sudo samba-tool user list
+sudo samba-tool user setpassword <usuario> --newpassword='...'
 
-# Check routes
-ip route show
+# ── GRUPOS ─────────────────────────────────────────────────────────
+sudo samba-tool group add <grupo>
+sudo samba-tool group addmembers <grupo> <usuario>
+sudo samba-tool group listmembers <grupo>
+
+# ── SHARES (desde Windows CMD) ─────────────────────────────────────
+net view \\172.31.16.133
+net use Z: \\172.31.16.133\ITDocs /persistent:yes
+net use * /delete
 ```
-
-### Windows Server
-```powershell
-# View network configuration
-ipconfig /all
-
-# Test connection
-Test-NetConnection <IP> -Port <PORT>
-
-# View firewall rules
-Get-NetFirewallRule | Where-Object {$_.Enabled -eq 'True'}
-
-# Check SMB version
-Get-SmbConnection
-```
-
----
-
-## 12. Additional Resources
-
-- [AWS EC2 Documentation](https://docs.aws.amazon.com/ec2/)
-- [Samba Official Documentation](https://www.samba.org/samba/docs/)
-- [AWS Security Groups Guide](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)
-- [Windows Server on AWS](https://aws.amazon.com/windows/)
 
 ---
 
 <div align="center">
-<sub>AWS Connectivity Guide | Windows ↔ Ubuntu | 2025</sub>
+
+**ASIR · EduTech Castellón**  
+Administración de Sistemas Informáticos en Red
+
 </div>
